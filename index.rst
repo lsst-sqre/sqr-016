@@ -151,7 +151,16 @@ This is mostly a repeat of the process for laying down the candidate tag but thi
   # for externals NOTE THE v PREFIX to avoid stomping on the eups semantic versioning
   github-tag-version --org lsst --team 'DM Externals' --candidate v13_0_rc1 v13.0 b2748
 
+Release build
+^^^^^^^^^^^^^
+
+- Submit the run-rebuild job with your parameters (eg. 13.0 v13.0)
+
+- At this point you should not be seeing master-g type references as eups versions. Everything should have a tag-derviced version such as 13.0 if they are a DM repo and their semantic tag if they are external. If you see one, chase down why.
   
+- Note your final bNNNN number for the publish
+
+- Submit the run-publish job making sure you have selected 'package'' and not 'git' on the dropdown
 
   
 
