@@ -56,11 +56,29 @@ Tokens
 ------
 
 +-------------------------+----------------------------------------------------------+
-| tag (release version)   | 13.0                                                     |
+| tag (release version)   | 14.0                                                     |
 +-------------------------+----------------------------------------------------------+
 | EUPS_PKGROOT filesystem | lsst-dev01.ncsa.illinois.edu:/lsst/distserver/production |
 +-------------------------+----------------------------------------------------------+
 
+
+
+The LSST Stack Release Process
+------------------------------
+
+The LSST stack is a large mixed Python/C++ codebase split among many repos with multiple depndencies between them built by a niche build system. The release process is therefore a bit complex and can be protracted. In an attempt to have to co-ordinate the state of the release with 80+ developers, or worse, have them down tools while a release is being minted, this process has been optimized to impact development as little as possible. Unless a developer needs to be called upon to fix a failing integration or platform test, she can carry on as normal.
+
+In gross, the conceptual steps are:
+
+#. A successful weekly release is identified that forms the basis for the official release.
+#. The first release candidate (rc1) is tagged using that weekly as a seed. This means that it does not matter if the codebase's master has moved on in the meanwhile.
+#. Repositories are tagged or branched with additional rc tags if hotfixes or late features are accepted
+#. Documentation is updated on a branch (release notes, installation instructions, metrics report)
+#. The final build is published and the documentation merged to master.
+
+   
+Kicking-off the process
+-----------------------
 
 Preparing for a candidate release
 ---------------------------------
@@ -68,7 +86,27 @@ Preparing for a candidate release
 Get codekit installed
 ^^^^^^^^^^^^^^^^^^^^^
 
-If you are working interactively you want to set the environment variable DM_SQUARE_DEBUG to 1 as it gives more insight on what is going on with the Github REST API calls. 
+If you are working interactively you want to set the environment
+variable DM_SQUARE_DEBUG to 1 as it gives more insight on what is
+going on with the Github REST API calls.
+
+Github teams
+^^^^^^^^^^^^
+
+There are three "special" teams in the LSST Github org
+
+
+These are:
+
+Data Management
+DM Externals
+DM Auxilliaries
+These are used in the release process in the following way:
+
+Data Management repos that are a dependency of lsst_distrib are tagged with the bare release version, eg. '14.0'
+'DM Externals' that are a dependency of lsst_distrib are tagged with 'v14.0' (so that eups does not show it and confuse people who want the upstream semantic versioning to show up)
+'DM Auxilliaries' are repos that we want to snapshot as part of a relase (eg sdss_demo) but are not an eups dependancy of lsst_distrib
+
 
 Release the demo
 ^^^^^^^^^^^^^^^^
@@ -84,13 +122,44 @@ At this point you should branch ``lsst/pipelines_lsst_io``
 .. code-block:: bash
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
-   git checkout -b 13.0
+   git checkout -b 14.0
 
 Update the ``demo.rst`` page to point to the demo release you just made and use this version for testing your candidates as described in the pipelines documentation for testing your installation.
 
 
 Candidate release
 -----------------
+
+Identify the weekly you wish to build the release on, say w_201733
+
+Look into the text of the annotated tag (using git log or the Github UI) to see what the bXXXX number was.
+
+
+
+Tag the candidate
+^^^^^^^^^^^^^^^^^
+
+Tagging first and third parties allows the release to be reproduceable in the future and is necessary for the final build process.
+
+Note the difference in tag name convention between first and third parties.
+
+.. code-block:: bash
+
+   # git tag the first parties
+
+   github-tag-version --org lsst --team 'Data Management' --candidate v14_0_rc2 14.0 bXXXX
+   github-tag-version --org lsst --team 'Database' --candidate v14_0_rc2 14.0 bXXXX
+   
+   # for externals NOTE THE v PREFIX to avoid stomping on the eups semantic versioning
+   github-tag-version --org lsst --team 'DM Externals' --candidate v14_0_rc2 v14.0 bXXXX
+
+This is the final tag against the third parties since they are slow-moving and have been proven to work with the weekly candidate seed. In the rare event where a problem is identified the tag can be moved along.
+   
+Publish the candidate
+^^^^^^^^^^^^^^^^^^^^^
+
+
+	
 
 
 Final source release
@@ -114,11 +183,11 @@ The first repo that should be branched is lsst/lsst:
 .. code-block:: bash
 
    git clone https://github.com/lsst/lsst.git
-   git checkout -b 13.0
+   git checkout -b 14.0
    
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this newinstall to be one associated with the current branch::
 
-  NEWINSTALL="https://raw.githubusercontent.com/lsst/lsst/13.0/scripts/newinstall.sh"
+  NEWINSTALL="https://raw.githubusercontent.com/lsst/lsst/14.0/scripts/newinstall.sh"
 
 and commit and push.
   
@@ -139,29 +208,92 @@ Final tag
 ^^^^^^^^^
 
 Now it's time to lay down the final git tag. For repositories that
-have already been branched with the 13.0 ref, that will fail, which is
+have already been branched with the 14.0 ref, that will fail, which is
 fine.
 
 This is mostly a repeat of the process for laying down the candidate tag but this time we use numeric tags so that eups will see them::
 
   # tag repos involved in the final candidate and final build
-  github-tag-version --org lsst --team 'Data Management' --candidate v13_0_rc1 13.0 b2748
-  github-tag-version --org lsst --team 'Database' --candidate v13_0_rc1 13.0 b2748
+  github-tag-version --org lsst --team 'Data Management' --candidate v14_0_rc2 14.0 b3176
+  github-tag-version --org lsst --team 'Database' --candidate v14_0_rc2 14.0 b3176
 
-  # for externals NOTE THE v PREFIX to avoid stomping on the eups semantic versioning
-  github-tag-version --org lsst --team 'DM Externals' --candidate v13_0_rc1 v13.0 b2748
+Since you already tagged the third parties with their special final tag already, no need to do anything here.
 
 Release build
 ^^^^^^^^^^^^^
 
-- Submit the run-rebuild job with your parameters (eg. 13.0 v13.0)
+- Submit the run-rebuild job with your parameters (eg. 14.0 v14.0)
 
-- At this point you should not be seeing master-g type references as eups versions. Everything should have a tag-derviced version such as 13.0 if they are a DM repo and their semantic tag if they are external. If you see one, chase down why.
+- At this point you should not be seeing master-g type references as eups versions. Everything should have a tag-derviced version such as 14.0 if they are a DM repo and their semantic tag (eg. pyfits 3.0) if they are external. If you see one, you need to chase down why. The only situation that should happen is if a third party but a branch is used for LSST development that lacks any other type of semantic versioning (in the 14.0 release this included starlink_ast and jointcal_cholmod.
   
-- Note your final bNNNN number for the publish
+- Note your final bNNNN number for the publish (either from the build log or by looking at the next of the annotated 14.0 tag on any repo eg. afw). 
 
-- Submit the run-publish job making sure you have selected 'package'' and not 'git' on the dropdown
+- Submit the run-publish job making sure you have selected 'package' and not 'git' as the option.
+
+
+Other OS checking
+^^^^^^^^^^^^^^^^^
+
+While we only officially support the software on certain platforms (RHEL/CentOS 7 is the reference, and we CI MacOS and RHEL 6), we check in a number of other popular platforms (eg Ubuntu, newer versions of CentOS etc) by spinning up machines on Digital Ocean (typically) and following the user install instructions. This also allows us to check the user from-scratch installation instructions including the pre-requisites.
+
+Binaries
+--------
+
+Run the tarball-matrix job with the options `SMOKE`, `RUN_SCONS_CHECK`, `PUBLISH`
+
+Documentation
+-------------
 
   
+
+c.l.o stubb
+-----------
+
+.. code-block:: none
+
+  Here is where we currently are in the release process. Current step in bold. 
+
+  Summary
+  -----------
+  
+  Release is complete
+  
+  W16-specific Precursor Steps
+  ---------------------------------
+  
+  1. Identify any pre-release blockers ("must-have features") :tools:
+  2. Wait for them to clear
+  
+  
+  Release Engineering Steps
+  -------------------------------
+  
+  1. Eups publish rc1 candidate (based on b2748) (also w_2017_33)
+  1. Git Tag v14.0-rc1
+  1. Branch v14 of newinstall.sh
+  1. Github release lsst_demo v14
+  1. **Wait for first round of bugs to clear**
+  1.Repeat last 2 steps, -rcN candidates  <-- final candidate is rc1 [yay!]
+  1. Confirm DM Externals are at stable tags
+  1. Tag DM Auxilliary (non-lsst_distrib) repos 
+  1. Full OS testing (see https://ls.st/faq )
+  1. Git Tag 14.0, rebuild, eups publish
+
+  Binary release steps
+  ------------------------
+
+  1. Produce factory binaries
+  1. Test factory binaries
+  1. Gather contributed binaries
+  
+  Documentation Steps 
+  -------------------------
+  
+  1. Update Prereqs/Install 
+  1. Update Known Issues 
+  1. Gather Release notes
+  1. Gather Metrics report
+  1. **Email announcement**
+
 
 
