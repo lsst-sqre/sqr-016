@@ -94,6 +94,10 @@ Preparing for a candidate release
 Get codekit installed
 ^^^^^^^^^^^^^^^^^^^^^
 
+The release manager can folow the instructions at:
+
+https://github.com/lsst-sqre/sqre-codekit
+
 If you are working interactively you want to set the environment
 variable DM_SQUARE_DEBUG to 1 as it gives more insight on what is
 going on with the Github REST API calls.
@@ -256,10 +260,9 @@ Documentation to be collected for the release notes in pipelines_lsst_io is:
 
 - Release notes from the T/CAMs for Pipelines, SUI, and DAX
 - Characterisation report from the DM or SQuaRE scientist
-- Known issues from the T/CAM for SQuaRE
+- Known issues and pre-requisites from the T/CAM for SQuaRE
 - Before merging to master, ask the Documentation Engineer to review
 
-  
 
 c.l.o stubb
 -----------
