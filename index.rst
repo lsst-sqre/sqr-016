@@ -66,7 +66,7 @@ Tokens
 The LSST Stack Release Process
 ------------------------------
 
-The LSST stack is a large mixed Python/C++ codebase split among many repos with multiple depndencies between them built by a niche build system. The release process is therefore a bit complex and can be protracted. In an attempt to have to co-ordinate the state of the release with 80+ developers, or worse, have them down tools while a release is being minted, this process has been optimized to impact development as little as possible. Unless a developer needs to be called upon to fix a failing integration or platform test, she can carry on as normal.
+The LSST stack is a large mixed Python/C++ codebase split among many repos with multiple dependencies between them built by a niche build system. The release process is therefore a bit complex and can be protracted. In an attempt not to have to co-ordinate the state of the release with 80+ developers, or worse, have them down tools while a release is being minted, this process has been optimized to impact development as little as possible. Unless a developer needs to be called upon to fix a failing integration or platform test, she can carry on as normal.
 
 In gross, the conceptual steps are:
 
@@ -79,6 +79,14 @@ In gross, the conceptual steps are:
    
 Kicking-off the process
 -----------------------
+
+The first step is to establish whether it is a good time to make a release, eg. if many developers are about to push significant features, it may be better to wait for them to finish. Announce the intent to make a release in the #dm channel and inform all DM T/CAMs and the DM System Engineer. 
+
+If it is generally a good time, identify the nearest weekly release, this will be the seed for the release candidate.
+
+Next, start a community.lsst.org post to use for status updates.
+
+
 
 Preparing for a candidate release
 ---------------------------------
