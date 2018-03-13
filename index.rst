@@ -252,6 +252,13 @@ Run the tarball-matrix job with the options `SMOKE`, `RUN_SCONS_CHECK`, `PUBLISH
 Documentation
 -------------
 
+Documentation to be collected for the release notes in pipelines_lsst_io is:
+
+- Release notes from the T/CAMs for Pipelines, SUI, and DAX
+- Characterisation report from the DM or SQuaRE scientist
+- Known issues from the T/CAM for SQuaRE
+- Before merging to master, ask the Documentation Engineer to review
+
   
 
 c.l.o stubb
@@ -266,7 +273,7 @@ c.l.o stubb
   
   Release is complete
   
-  W16-specific Precursor Steps
+  Precursor Steps
   ---------------------------------
   
   1. Identify any pre-release blockers ("must-have features") :tools:
