@@ -140,7 +140,7 @@ Update the ``demo.rst`` page to point to the demo release you just made and use 
 Candidate release
 -----------------
 
-Identify the weekly you wish to build the release on, say w_201733
+Identify the weekly you wish to build the release on, say ``w_2017_33``.
 
 Look into the text of the annotated tag (using git log or the Github UI) to see what the bXXXX number was.
 
