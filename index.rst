@@ -76,11 +76,11 @@ In gross, the conceptual steps are:
 #. Documentation is updated on a branch (release notes, installation instructions, metrics report)
 #. The final build is published and the documentation merged to master.
 
-   
+
 Kicking-off the process
 -----------------------
 
-The first step is to establish whether it is a good time to make a release, eg. if many developers are about to push significant features, it may be better to wait for them to finish. Announce the intent to make a release in the #dm channel and inform all DM T/CAMs and the DM System Engineer. 
+The first step is to establish whether it is a good time to make a release, eg. if many developers are about to push significant features, it may be better to wait for them to finish. Announce the intent to make a release in the #dm channel and inform all DM T/CAMs and the DM System Engineer.
 
 If it is generally a good time, identify the nearest weekly release, this will be the seed for the release candidate.
 
@@ -129,7 +129,7 @@ new release' with your tag. See its release history for examples.
 Branching the docs
 ^^^^^^^^^^^^^^^^^^
 
-At this point you should branch ``lsst/pipelines_lsst_io`` 
+At this point you should branch ``lsst/pipelines_lsst_io``
 
 .. code-block:: bash
 
@@ -161,22 +161,18 @@ Note the difference in tag name convention between first and third parties.
 
    github-tag-version --org lsst --team 'Data Management' --candidate v14_0_rc2 14.0 bXXXX
    github-tag-version --org lsst --team 'Database' --candidate v14_0_rc2 14.0 bXXXX
-   
+
    # for externals NOTE THE v PREFIX to avoid stomping on the eups semantic versioning
    github-tag-version --org lsst --team 'DM Externals' --candidate v14_0_rc2 v14.0 bXXXX
 
 This is the final tag against the third parties since they are slow-moving and have been proven to work with the weekly candidate seed. In the rare event where a problem is identified the tag can be moved along.
-   
+
 Publish the candidate
 ^^^^^^^^^^^^^^^^^^^^^
 
 
-	
-
-
 Final source release
 --------------------
-
 
 
 Branching lsst
@@ -188,7 +184,7 @@ repositories that need retroactive maintainance or need to be
 available in more than one cadence. One such example is the ``lsst``
 repo since it containes ``newinstall.sh`` which sets the version of
 eups, and that may be different for an official release than the
-current bleed. 
+current bleed.
 
 The first repo that should be branched is lsst/lsst:
 
@@ -196,13 +192,13 @@ The first repo that should be branched is lsst/lsst:
 
    git clone https://github.com/lsst/lsst.git
    git checkout -b 14.0
-   
+
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this newinstall to be one associated with the current branch::
 
   NEWINSTALL="https://raw.githubusercontent.com/lsst/lsst/14.0/scripts/newinstall.sh"
 
 and commit and push.
-  
+
 This means that if you need to update newinstall.sh for bleed users, official-release users will not be prompted to update to the latest version, but will phone home against their official-release branch for hotfixes.
 
 Also double-check for other things that might need to be updated, like the documentation links (though these should really be fixed on master prior to branching or cherry-picked back).
@@ -237,8 +233,8 @@ Release build
 - Submit the run-rebuild job with your parameters (eg. 14.0 v14.0)
 
 - At this point you should not be seeing master-g type references as eups versions. Everything should have a tag-derviced version such as 14.0 if they are a DM repo and their semantic tag (eg. pyfits 3.0) if they are external. If you see one, you need to chase down why. The only situation that should happen is if a third party but a branch is used for LSST development that lacks any other type of semantic versioning (in the 14.0 release this included starlink_ast and jointcal_cholmod.
-  
-- Note your final bNNNN number for the publish (either from the build log or by looking at the next of the annotated 14.0 tag on any repo eg. afw). 
+
+- Note your final bNNNN number for the publish (either from the build log or by looking at the next of the annotated 14.0 tag on any repo eg. afw).
 
 - Submit the run-publish job making sure you have selected 'package' and not 'git' as the option.
 
@@ -269,23 +265,23 @@ c.l.o stubb
 
 .. code-block:: none
 
-  Here is where we currently are in the release process. Current step in bold. 
+  Here is where we currently are in the release process. Current step in bold.
 
   Summary
   -----------
-  
+
   Release is complete
-  
+
   Precursor Steps
   ---------------------------------
-  
+
   1. Identify any pre-release blockers ("must-have features") :tools:
   2. Wait for them to clear
-  
-  
+
+
   Release Engineering Steps
   -------------------------------
-  
+
   1. Eups publish rc1 candidate (based on b2748) (also w_2017_33)
   1. Git Tag v14.0-rc1
   1. Branch v14 of newinstall.sh
@@ -293,7 +289,7 @@ c.l.o stubb
   1. **Wait for first round of bugs to clear**
   1.Repeat last 2 steps, -rcN candidates  <-- final candidate is rc1 [yay!]
   1. Confirm DM Externals are at stable tags
-  1. Tag DM Auxilliary (non-lsst_distrib) repos 
+  1. Tag DM Auxilliary (non-lsst_distrib) repos
   1. Full OS testing (see https://ls.st/faq )
   1. Git Tag 14.0, rebuild, eups publish
 
@@ -303,12 +299,12 @@ c.l.o stubb
   1. Produce factory binaries
   1. Test factory binaries
   1. Gather contributed binaries
-  
-  Documentation Steps 
+
+  Documentation Steps
   -------------------------
-  
-  1. Update Prereqs/Install 
-  1. Update Known Issues 
+
+  1. Update Prereqs/Install
+  1. Update Known Issues
   1. Gather Release notes
   1. Gather Metrics report
   1. **Email announcement**
