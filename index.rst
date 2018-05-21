@@ -69,7 +69,7 @@ In gross, the conceptual steps are:
 #. A successful weekly release is identified that forms the basis for the
    official release.
 
-#. The first release candidate (rc1) is tagged using that weekly as a seed.
+#. The first release candidate (``rc1``) is tagged using that weekly as a seed.
    This means that it does not matter if the codebase's master has moved on in
    the meanwhile.
 
@@ -109,8 +109,9 @@ The release manager can folow the instructions at:
 https://github.com/lsst-sqre/sqre-codekit
 
 If you are working interactively you want to set the environment variable
-DM_SQUARE_DEBUG to 1 as it gives more insight on what is going on with the
-Github REST API calls.
+``DM_SQUARE_DEBUG`` to ``1`` as it gives more insight on what is going on with
+the Github REST API calls.
+
 
 Github teams
 ^^^^^^^^^^^^
@@ -119,20 +120,20 @@ There are three "special" teams in the LSST Github org
 
 These are:
 
-- Data Management
+- ``Data Management``
 
-- DM Externals
+- ``DM Externals``
 
-- DM Auxilliaries
+- ``DM Auxilliaries``
 
 These are used in the release process in the following way:
 
 Data Management repos that are a dependency of lsst_distrib are tagged with the
-bare release version, eg. '14.0' 'DM Externals' that are a dependency of
-lsst_distrib are tagged with 'v14.0' (so that eups does not show it and confuse
-people who want the upstream semantic versioning to show up) 'DM Auxilliaries'
-are repos that we want to snapshot as part of a relase (eg sdss_demo) but are
-not an eups dependancy of lsst_distrib
+bare release version, eg. ``14.0`` ``DM Externals`` that are a dependency of
+lsst_distrib are tagged with ``v14.0`` (so that eups does not show it and
+confuse people who want the upstream semantic versioning to show up) ``DM
+Auxilliaries`` are repos that we want to snapshot as part of a relase (eg
+``sdss_demo``) but are not an eups dependancy of ``lsst_distrib``.
 
 
 Release the demo
@@ -157,14 +158,14 @@ this version for testing your candidates as described in the pipelines
 documentation for testing your installation.
 
 
+
 Candidate release
 -----------------
 
 Identify the weekly you wish to build the release on, say ``w_2017_33``.
 
 Look into the text of the annotated tag (using git log or the Github UI) to see
-what the bXXXX number was.
-
+what the ``bXXXX`` number was.
 
 
 Tag the candidate
@@ -242,7 +243,7 @@ Final tag
 ^^^^^^^^^
 
 Now it's time to lay down the final git tag. For repositories that have already
-been branched with the 14.0 ref, that will fail, which is fine.
+been branched with the ``14.0`` ref, that will fail, which is fine.
 
 This is mostly a repeat of the process for laying down the candidate tag but
 this time we use numeric tags so that eups will see them::
@@ -257,45 +258,47 @@ already, no need to do anything here.
 Release build
 ^^^^^^^^^^^^^
 
-- Submit the run-rebuild job with your parameters (eg. 14.0 v14.0)
+- Submit the run-rebuild job with your parameters (eg. ``14.0`` ``v14.0``)
 
 - At this point you should not be seeing master-g type references as eups
-  versions. Everything should have a tag-derviced version such as 14.0 if they
-  are a DM repo and their semantic tag (eg. pyfits 3.0) if they are external.
-  If you see one, you need to chase down why. The only situation that should
-  happen is if a third party but a branch is used for LSST development that
-  lacks any other type of semantic versioning (in the 14.0 release this
-  included starlink_ast and jointcal_cholmod.
+  versions. Everything should have a tag-derviced version such as ``14.0`` if
+  they are a DM repo and their semantic tag (eg. ``pyfits 3.0``) if they are
+  external.  If you see one, you need to chase down why. The only situation
+  that should happen is if a third party but a branch is used for LSST
+  development that lacks any other type of semantic versioning (in the ``14.0``
+  release this included starlink_ast and jointcal_cholmod.
 
-- Note your final bNNNN number for the publish (either from the build log or by
-  looking at the next of the annotated 14.0 tag on any repo eg. afw).
+- Note your final ``bNNNN`` number for the publish (either from the build log
+  or by looking at the next of the annotated ``14.0`` tag on any repo eg. afw).
 
-- Submit the run-publish job making sure you have selected 'package' and not
-  'git' as the option.
+- Submit the run-publish job making sure you have selected ``package`` and not
+  ``git`` as the option.
 
 
 Other OS checking
 ^^^^^^^^^^^^^^^^^
 
-While we only officially support the software on certain platforms (RHEL/CentOS
-7 is the reference, and we CI MacOS and RHEL 6), we check in a number of other
-popular platforms (eg Ubuntu, newer versions of CentOS etc) by spinning up
-machines on Digital Ocean (typically) and following the user install
-instructions. This also allows us to check the user from-scratch installation
-instructions including the pre-requisites.
+While we only officially support the software on certain platforms
+(`RHEL/CentOS 7` is the reference, and we CI `MacOS` and `RHEL 6`), we check in
+a number of other popular platforms (eg `Ubuntu`, newer versions of `CentOS`
+etc) by spinning up machines on Digital Ocean (typically) and following the
+user install instructions. This also allows us to check the user from-scratch
+installation instructions including the pre-requisites.
 
 
 
 Binaries
 --------
 
-Run the tarball-matrix job with the options `SMOKE`, `RUN_SCONS_CHECK`, `PUBLISH`
+Run the tarball-matrix job with the options ``SMOKE``, ``RUN_SCONS_CHECK``,
+``PUBLISH``.
 
 
 Documentation
 -------------
 
-Documentation to be collected for the release notes in pipelines_lsst_io is:
+Documentation to be collected for the release notes in ``pipelines_lsst_io``
+is:
 
 - Release notes from the T/CAMs for Pipelines, SUI, and DAX
 - Characterisation report from the DM or SQuaRE scientist
