@@ -355,3 +355,94 @@ c.l.o stubb
   1. Gather Metrics report
   1. **Email announcement**
 
+
+
+Format of "tags"
+----------------
+
+git tags
+^^^^^^^^
+
+- DM produced code this is part of an "official" release  **must** have a git
+  tag that starts with a *number*
+
+- "official" release git tags on external/third-party software that DM has
+  repackaged must be prefixed with a ``v`` but are otherwise identical to that
+  on DM produced code. Eg., ``42.0.0 -> v42.0.0``
+
+- Non-"official" releases, release candiates, weekly builds, etc. **must**
+  start with a *letter*
+
+- **shall** only use ``[a-z]``, ``[0-9]``, and ``.``
+
+  * *lowercase* latin alphabet characters **shall** be used; *uppercase*
+    characters are forbidden
+
+  * These common characters **must not** be used: ``-``, ``_``, ``/``
+
+
+Examples of *valid* (good) git tags
+
+..
+    # unofficial builds
+    d.2038.01.19
+    w.2038.03
+ 
+    # release candidate
+    v42.0.0.rc99
+ 
+    # official release of DM produced code
+    42.0.0
+ 
+    # official release of external/third-party product
+    v42.0.0
+
+Examples of *invalid* (bad) git tags
+
+..
+    d_2038_01_19
+    w_2038_03
+    v42-0-0-rc99
+    42_0_0
+    v42_0_0
+    foo/bar
+
+
+eups tags
+^^^^^^^^^
+
+- **must not** start with a numeric value
+
+- **shall** only use ``[a-z]``, ``[0-9]``, and ``_``
+
+  * *lowercase* latin alphabet characters **shall** be used; *uppercase*
+    characters are forbidden
+
+  * EUPS reportedly has or has had problems with ``.`` and ``-``
+
+- official releases and release candiates **must** be prefixed with ``v``
+
+
+Examples of *valid* (good) eups tags
+
+..
+    # unofficial builds
+    d_2038_01_19
+    w_2038_03
+ 
+    # release candidate
+    v42_0_0_rc99
+ 
+    # official release of DM produced code AND external/third-party product
+    v42_0_0
+
+Examples of *invalid* (bad) eup tags
+
+..
+    123
+    d.2038.01.19
+    w.2038.03
+    v42_0_0-rc99
+    42.0.0
+    v42.0.0
+    foo/bar
