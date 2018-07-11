@@ -449,3 +449,18 @@ Examples of *invalid* (bad) eup tags
   42.0.0
   v42.0.0
   foo/bar
+
+git <-> eups tag conversion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The "tags" along each row in the following table should be considered
+equivalent conversions.
+
+============  ============  ========
+internal git  external git  eups tag
+============  ============  ========
+d.2038.01.19  d.2038.01.19  d_2038_01_19
+w.2038.03     w.2038.03     w_2038_03
+v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
+42.0.0        v42.0.0       v42_0_0
+============  ============  ========
