@@ -38,6 +38,7 @@
    Feel free to delete this instructional comment.
 
 :tocdepth: 1
+
 .. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
 
 .. sectnum::
@@ -142,16 +143,8 @@ These are used in the release process in the following way:
   Auxilliaries``.
 
 - ``DM Auxilliaries`` are repos that we want to snapshot as part of a release
-  (eg ``sdss_demo``) but are not an eups dependency of ``lsst_distrib``. "Aux"
-  repos must not also be members of ``DM Externals``.
-
-
-Release the demo
-^^^^^^^^^^^^^^^^
-
-Go to https://github.com/lsst/lsst_dm_stack_demo/releases and 'Draft a
-new release' with your tag. See its release history for examples.
-
+  but are not an eups dependency of ``lsst_distrib``. "Aux" repos must not also
+  be members of ``DM Externals``.
 
 Branching the docs
 ^^^^^^^^^^^^^^^^^^
@@ -162,11 +155,6 @@ At this point you should branch ``lsst/pipelines_lsst_io``
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
    git checkout -b 14.0
-
-Update the ``demo.rst`` page to point to the demo release you just made and use
-this version for testing your candidates as described in the pipelines
-documentation for testing your installation.
-
 
 
 Candidate release
@@ -341,7 +329,6 @@ c.l.o stubb
   1. Eups publish rc1 candidate (based on b2748) (also w_2017_33)
   1. Git Tag v14.0-rc1
   1. Branch v14 of newinstall.sh
-  1. Github release lsst_demo v14
   1. **Wait for first round of bugs to clear**
   1.Repeat last 2 steps, -rcN candidates  <-- final candidate is rc1 [yay!]
   1. Confirm DM Externals are at stable tags
