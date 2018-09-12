@@ -116,9 +116,7 @@ the Github REST API calls.
 Github teams
 ^^^^^^^^^^^^
 
-There are three "special" teams in the LSST Github org
-
-These are:
+There are three "special" teams in the LSST Github org:
 
 - ``Data Management``
 
@@ -128,12 +126,24 @@ These are:
 
 These are used in the release process in the following way:
 
-Data Management repos that are a dependency of lsst_distrib are tagged with the
-bare release version, eg. ``14.0`` ``DM Externals`` that are a dependency of
-lsst_distrib are tagged with ``v14.0`` (so that eups does not show it and
-confuse people who want the upstream semantic versioning to show up) ``DM
-Auxilliaries`` are repos that we want to snapshot as part of a relase (eg
-``sdss_demo``) but are not an eups dependancy of ``lsst_distrib``.
+- ``Data Management`` repos are a dependency of ``lsst_distrib`` and should be
+  tagged with the bare release version, eg. ``14.0``, unless the repo is also a
+  member of the ``DM Externals`` team.  All repos tagged as part of a release
+  should be members of the ``Data Management`` team to ensure that DM
+  developers are able to modify all components of a release.
+
+- ``DM Externals`` also indicates a dependency of ``lsst_distrib`` but one that
+  is tagged with a ``v`` prefix in front of the release version. Eg., ``v14.0``
+  This is required because ``lsst-build`` derives the eups product version
+  string from git tags that begin with a number.  DM developers prefer that
+  eups display external packages version string rather than of a DM composite
+  release. Thus the ``v`` prefix causes the git tag to be ignored by
+  ``lsst_distrib``.  "External" repos must not also be members of ``DM
+  Auxilliaries``.
+
+- ``DM Auxilliaries`` are repos that we want to snapshot as part of a release
+  (eg ``sdss_demo``) but are not an eups dependency of ``lsst_distrib``. "Aux"
+  repos must not also be members of ``DM Externals``.
 
 
 Release the demo
