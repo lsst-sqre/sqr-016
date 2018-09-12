@@ -365,3 +365,165 @@ c.l.o stubb
   1. Gather Metrics report
   1. **Email announcement**
 
+
+
+Format of "tags"
+----------------
+
+git tags
+^^^^^^^^
+
+- DM produced code this is part of an "official" release  **must** have a git
+  tag that starts with a *number*
+
+- "official" release git tags on external/third-party software that DM has
+  repackaged must be prefixed with a ``v`` but are otherwise identical to that
+  on DM produced code. Eg., ``42.0.0 -> v42.0.0``
+
+- Non-"official" releases, release candidates, weekly builds, etc. **must**
+  start with a *letter*
+
+- **shall** only use ``[a-z]``, ``[0-9]``, and ``.``
+
+  * *lowercase* latin alphabet characters **shall** be used; *uppercase*
+    characters are forbidden
+
+  * These common characters **must not** be used: ``-``, ``_``, ``/``
+
+
+Examples of *valid* (good) git tags
+
+.. code-block:: none
+
+  # unofficial builds
+  d.2038.01.19
+  w.2038.03
+
+  # release candidate
+  v42.0.0.rc99
+
+  # official release of DM produced code
+  42.0.0
+
+  # official release of external/third-party product
+  v42.0.0
+
+Examples of *invalid* (bad) git tags
+
+.. code-block:: none
+
+  d_2038_01_19
+  w_2038_03
+  v42-0-0-rc99
+  42_0_0
+  v42_0_0
+  foo/bar
+
+eups tags
+^^^^^^^^^
+
+- **must not** start with a numeric value
+
+- **shall** only use ``[a-z]``, ``[0-9]``, and ``_``
+
+  * *lowercase* latin alphabet characters **shall** be used; *uppercase*
+    characters are forbidden
+
+  * EUPS reportedly has or has had problems with ``.`` and ``-``
+
+- official releases and release candidates **must** be prefixed with ``v``
+
+
+Examples of *valid* (good) eups tags
+
+.. code-block:: none
+
+  # unofficial builds
+  d_2038_01_19
+  w_2038_03
+
+  # release candidate
+  v42_0_0_rc99
+
+  # official release of DM produced code AND external/third-party product
+  v42_0_0
+
+Examples of *invalid* (bad) eup tags
+
+.. code-block:: none
+
+  123
+  d.2038.01.19
+  w.2038.03
+  v42_0_0-rc99
+  42.0.0
+  v42.0.0
+  foo/bar
+
+git <-> eups tag conversion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The "tags" along each row in the following table should be considered
+equivalent conversions.
+
+============  ============  ========
+internal git  external git  eups tag
+============  ============  ========
+d.2038.01.19  d.2038.01.19  d_2038_01_19
+w.2038.03     w.2038.03     w_2038_03
+v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
+42.0.0        v42.0.0       v42_0_0
+============  ============  ========
+
+Conda Environment/Packages Update
+---------------------------------
+
+There are conflicting pressures of updating the conda package list frequently
+to minimize the ammount of [likely] breakage at one time and resisting changes
+as the git ``sha1`` of the conda environment files is used to defined the
+``ABI`` of the eups ``tarball`` packages.
+
+Adding a new Conda package
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. The name of the package needs to "bleed" or un-versioned environment files in
+   the ``lsst/lsstsw`` repo. Which are:
+
+    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_bleed-linux-64.txt
+    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_bleed-osx-64.txt
+
+    These env files are currently kept in the original conda environment file
+    format and have not yet been migrated to the newer ``yaml`` based format as
+    it only works with fairly recent conda releases. (*TODO* migrate to `yaml`
+    format after DM-14011 is merged).
+
+    The bleed env files should be keep in sync with the *exception* of the
+    ``nomkl`` package, which is required on ``linux``.  Also note that the env
+    files should be kept sorted to allow for clean ``diff`` s.
+
+#. The regular conda env files need to be updated by running a fresh install
+   with ``deploy -b``` (bleed install) and then manually exporting the env to a
+   file.  A side effect of this is other package versions will almost certainly
+   change and this **is an ABI breaking event**. The existing env files are:
+
+    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_packages-linux-64.txt
+    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_packages-osx-64.txt
+
+    ``conda list -e`` should be run on ``linux`` and ``osx`` installs and the
+    results committed for both platforms as **a single commit** so that the the
+    abbrev sha1 of the latest commit for both files will be the same.
+
+#. As an abbreviated sha1 of the ``lsst/lsstsw`` repo is used to select which
+   [version of] conda env files are used and to define the eups binary tarball
+   "ABI", jenkins needs to know this value to ensure that ``newinstall.sh`` is
+   explicitly using the correct ref and to construct the paths of the tarball
+   ``EUPS_PKGROOT`` s.  The ``lsstsw_ref`` / ``LSST_LSSTSW_REF`` needs to be
+   updated at:
+
+    - https://github.com/lsst-sqre/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
+    - https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh#L33
+
+#. The ~last major release should be rebuilt in the new "ABI" ``EUPS_PKGROOT`` so
+   that that newinstall.sh from master will still be able to do a binary
+   install of the current major release.  This may be done by triggering a
+   jenknins ``release/tarball-matrix`` build.
