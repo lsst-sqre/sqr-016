@@ -70,18 +70,37 @@ In gross, the conceptual steps are:
 #. A successful weekly release is identified that forms the basis for the
    official release.
 
-#. The first release candidate (``rc1``) is tagged using that weekly as a seed.
+#. (NOT YET IMPLIMENTED) Create a release branch across all EUPS product (DM + external + Aux???)
+   repositories.
+
+#. The first release candidate (``rc1``) is created using that weekly build as a seed.
    This means that it does not matter if the codebase's master has moved on in
    the meanwhile.
 
-#. Repositories are tagged or branched with additional rc tags if hotfixes or
-   late features are accepted
+#. The ``rc`` is anonunced for developer testing
+
+#. Additional ``rc`` are created and annouonced, if/as nessicary to resolve
+   any release blocking issues that may arrise.
 
 #. Documentation is updated on a branch (release notes, installation
    instructions, metrics report)
 
-#. The final build is published and the documentation merged to master.
+#. The final release is created using the last ``rc`` verbatim (ie., the
+   accepted ``rc`` and final release code should be identitical except for the
+   name of git/eups tags) and the documentation merged to ``master``.
 
+Each ``rc`` and the final release should built and published using the same
+basic steps of:
+
+#. ``eups`` source or ``eupspkg`` packages + an ``eups tag`` are published.
+
+#. ``eups`` binary or ``tarball`` packages + ``eups tag`` (s) are published.
+
+#. A ``science pipelines`` docker image is published.
+
+#. A ``jupyterlab`` docker image is published.
+
+#. ``validate_drp`` is run with results published to ``squash``.
 
 
 Kicking-off the process
@@ -98,14 +117,13 @@ be the seed for the release candidate.
 Next, start a community.lsst.org post to use for status updates.
 
 
-
 Preparing for a candidate release
 ---------------------------------
 
 Get codekit installed
 ^^^^^^^^^^^^^^^^^^^^^
 
-The release manager can folow the instructions at:
+The release manager can follow the instructions at:
 
 https://github.com/lsst-sqre/sqre-codekit
 
@@ -156,59 +174,257 @@ At this point you should branch ``lsst/pipelines_lsst_io``
    git clone https://github.com/lsst/pipelines_lsst_io.git
    git checkout -b 14.0
 
+1st Release Candidate
+---------------------
 
-Candidate release
------------------
+**The official release process, beyond determining the weekly tag/manifest ID,
+is captured as a jenkins job:
+https://ci.lsst.codes/job/release/job/official-release/**
 
-Identify the weekly you wish to build the release on, say ``w_2017_33``.
+The following sections attempt to document the individual steps that
+``official-release`` is essentially composed of.
+
+Identify base weekly build
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Identify the *git tag* of the weekly build you wish to base the release
+release candidate upon, say ``w.2017.33``.
 
 Look into the text of the annotated tag (using git log or the Github UI) to see
-what the ``bXXXX`` number was.
-
-
-Tag the candidate
-^^^^^^^^^^^^^^^^^
-
-Tagging first and third parties allows the release to be reproduceable in the
-future and is necessary for the final build process.
-
-Note the difference in tag name convention between first and third parties.
+what the manifest ID (``bXXXX``) number was or use git cli on a local clone of
+a git repo known to be part of the weekly build.
 
 .. code-block:: bash
 
-   # git tag the first parties
+    # find manifest ID of a previous weekly build
 
-   github-tag-version --org lsst --team 'Data Management' --candidate v14_0_rc2 14.0 bXXXX
-   github-tag-version --org lsst --team 'Database' --candidate v14_0_rc2 14.0 bXXXX
+    $ git clone https://github.com/lsst/base
+    Cloning into 'base'...
+    remote: Counting objects: 1041, done.
+    remote: Compressing objects: 100% (9/9), done.
+    remote: Total 1041 (delta 6), reused 0 (delta 0), pack-reused 1032
+    Receiving objects: 100% (1041/1041), 259.28 KiB | 1.21 MiB/s, done.
+    Resolving deltas: 100% (521/521), done.
+    $ cd base
+    $ git tag w.2017.33 -n1
+    w.2017.33       Version w.2017.33 release from w.2017.33/b2999
 
-   # for externals NOTE THE v PREFIX to avoid stomping on the eups semantic versioning
-   github-tag-version --org lsst --team 'DM Externals' --candidate v14_0_rc2 v14.0 bXXXX
+In the above example, the manifest ID is ``b29999``.
 
-This is the final tag against the third parties since they are slow-moving and
-have been proven to work with the weekly candidate seed. In the rare event
-where a problem is identified the tag can be moved along.
+*git tag* the candidate
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Tagging *first* and *third* parties repos allows the release to be reproducible in
+the future and is necessary for the final build process.
+
+Note that the difference in *git tag* name convention between first and third
+parties is automatically handled by the ``--external-team`` flag.
+
+.. code-block:: bash
+
+   # create git "release candidate" tag from manifest ID
+
+   github-tag-version \
+     --debug \
+     --token **** \
+     --user sqreadmin \
+     --email sqre-admin@lists.lsst.org \
+     --org lsst \
+     --allow-team 'Data Management' \
+     --allow-team 'DM Externals' \
+     --external-team 'DM Externals' \
+     --deny-team 'DM Auxilliaries' \
+     --manifest-only \
+     --manifest b2999 \
+     v42.0.0.rc1
+
+.. code-block:: bash
+
+    # create git on aux repos
+    # previous weekly tag.
+
+    github-tag-teams \
+      --debug \
+      --token **** \
+      --user sqreadmin \
+      --email sqre-admin@lists.lsst.org \
+      --org lsst \
+      --allow-team 'DM Auxilliaries' \
+      --deny-team 'DM Externals' \
+      --ignore-existing-tag \
+      --tag v42.0.0.rc1
+
+**XXX this is currently broken in that the git tag will be placed at the
+current HEAD of the default branch instead of at the same location as the**
+
+Build and Publish eups ``eupspkg`` packages + eups tag
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
+
+The resulting manifest ID needs to be retrieve to use as input for subsequent
+jobs.
+
+.. code-block::
+
+    REFS: v42.0.0.rc1
+    PRODUCTS: lsst_distrib
+    BUILD_DOCS: true
+
+https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-publish/activity
+
+.. code-block::
+
+    PRODUCTS: lsst_distrib
+    EUPSPKG_SOURCE: git
+    TAG: v42_0_0_rc1
+    BUILD_ID: bXXXX
+
+Build and Publish eups ``tarball`` packages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Note that the jenkins ``release/official-release`` job does not trigger
+``release/tarball-matrix`` and triggers ``release/tarball`` build(s) directly
+so as to have more explicit control over the parameters.
+
+https://ci.lsst.codes/blue/organizations/jenkins/release%2Ftarball-matrix/activity
+
+.. code-block::
+
+    PRODUCTS: lsst_distrib
+    EUPS_TAG: v42_0_0_rc1
+    SMOKE: true
+    RUN_SCONS_CHECK: true
+    PUBLISH: true
+
+Build and Publish ``scipipe`` docker image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+https://ci.lsst.codes/blue/organizations/jenkins/release%2Fdocker%2Fbuild-stack/activity
+
+.. code-block::
+
+    PRODUCTS: lsst_distrib
+    TAG: v42_0_0_rc1  # eups tag
+    NO_PUSH: false
+
+Build and Publish ``jupyterlab`` docker image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Finfra%2Fbuild-jupyterlabdemo/activity
+
+.. code-block::
+
+    WIPEOUT: true
+    MANIFEST_ID: bXXXX
+    COMPILER: devtoolset-6
+    EUPS_TAG: v42_0_0_rc1
+    RELEASE_IMAGE: lsstsqre/centos:7-stack-lsst_distrib-v42_0_0_rc1
+    NO_PUSH: false
+
+Run ``validate_drp``
+^^^^^^^^^^^^^^^^^^^^
+
+https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Fvalidate_drp/activity
+
+.. code-block::
+
+    WIPEOUT: true
+    MANIFEST_ID: bXXXX
+    COMPILER: devtoolset-6
+    EUPS_TAG: v42_0_0_rc1
+    RELEASE_IMAGE: lsstsqre/centos:7-stack-lsst_distrib-v42_0_0_rc1
+
+2nd+ Release Candidate(s)
+-------------------------
+
+**Any subsequent ``rc` differs slightly from the initial ``rc1`` process
+because it inherently is not identical as a previous ``git tag`` (if it was,
+there would be no reason to produce another ``rc``). The creation of a git
+release branch prior to ``rc1`` would eliminate the differences.**
+
+Branch, Merge, Tag
+^^^^^^^^^^^^^^^^^^
+
+Any git repository that needs to be modified for additional ``rc`` should be
+**branched**, have the nessicary changes merged (**TBD**: merge to master and
+cherry-pick to release branch or merge to release branch and merge to
+``master``???)
+
+Produce new manifest (``manifest ID``)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use manifest ID as input to the first ``rc`` process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Final Release
+-------------
+
+Note that a *Final Release* differs from a *Release Candidate* in that the DM
+internal/first party git repositories receive a *git tag* that *does not* have
+an alphabetic prefix (eg., ``v``).  This has the effect of changing the *eups*
+version strings as ``lsst-build`` sets the *eups* product version based on the
+most recent git ref that has an *integer* as the first character.
+
+As consequene of this behavior is that the final git tag **must** be present
+prior to the production of ``eupspkg``/*eups tag*.
+
+Final tag
+^^^^^^^^^
+
+XXX failures are now fatal...
+
+Now it's time to lay down the final git tag. For repositories that have already
+been branched with the ``14.0`` ref, that will fail, which is fine.
+
+This is mostly a repeat of the process for laying down the candidate tag but
+this time we use numeric tags so that eups will see them:
+
+.. code-block:: bash
+
+   # tag repos involved in the final candidate as the final build
+
+   github-tag-version \
+     --org lsst \
+     --allow-team 'Data Management' \
+     --allow-team 'DM Externals' \
+     --external-team 'DM Externals' \
+     --deny-team 'DM Auxilliaries' \
+     --debug \
+     --candidate 'v14_0_rc2 \
+     '14.0' 'b3176'
 
 
-Publish the candidate
-^^^^^^^^^^^^^^^^^^^^^
+Release build
+^^^^^^^^^^^^^
 
+- Submit the run-rebuild job with your parameters (eg. ``14.0`` ``v14.0``)
 
+- At this point you should not be seeing master-g type references as eups
+  versions. Everything should have a tag-derived version such as ``14.0`` if
+  they are a DM repo and their semantic tag (eg. ``pyfits 3.0``) if they are
+  external.  If you see one, you need to chase down why. The only situation
+  that should happen is if a third party but a branch is used for LSST
+  development that lacks any other type of semantic versioning (in the ``14.0``
+  release this included starlink_ast and jointcal_cholmod.
 
-Final source release
---------------------
+- Note your final ``bNNNN`` number for the publish (either from the build log
+  or by looking at the next of the annotated ``14.0`` tag on any repo eg. afw).
 
+- Submit the run-publish job making sure you have selected ``package`` and not
+  ``git`` as the option.
 
 Branching lsst
 ^^^^^^^^^^^^^^^
 
 In this process we make use of the fact that git doesn't care whether a ref is
 a tag or a branch to constrain the number of branches to repositories that need
-retroactive maintainance or need to be available in more than one cadence. One
-such example is the ``lsst`` repo since it containes ``newinstall.sh`` which
+retroactive maintenance or need to be available in more than one cadence. One
+such example is the ``lsst`` repo since it contains ``newinstall.sh`` which
 sets the version of eups, and that may be different for an official release
 than the current bleed.
 
-The first repo that should be branched is lsst/lsst:
+The first repo that should be branched is ``lsst/lsst``:
 
 .. code-block:: bash
 
@@ -222,7 +438,7 @@ newinstall to be one associated with the current branch::
 
 and commit and push.
 
-This means that if you need to update newinstall.sh for bleed users,
+This means that if you need to update ``newinstall.sh`` for bleed users,
 official-release users will not be prompted to update to the latest version,
 but will phone home against their official-release branch for hotfixes.
 
@@ -230,48 +446,12 @@ Also double-check for other things that might need to be updated, like the
 documentation links (though these should really be fixed on master prior to
 branching or cherry-picked back).
 
+
 Doc update: newinstall.rst
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Update the ``newinstall.rst`` page on your release branch of pipelines_lsst_io
 with the new download location of the newinstall.sh script.
-
-
-Final tag
-^^^^^^^^^
-
-Now it's time to lay down the final git tag. For repositories that have already
-been branched with the ``14.0`` ref, that will fail, which is fine.
-
-This is mostly a repeat of the process for laying down the candidate tag but
-this time we use numeric tags so that eups will see them::
-
-  # tag repos involved in the final candidate and final build
-  github-tag-version --org lsst --team 'Data Management' --candidate v14_0_rc2 14.0 b3176
-  github-tag-version --org lsst --team 'Database' --candidate v14_0_rc2 14.0 b3176
-
-Since you already tagged the third parties with their special final tag
-already, no need to do anything here.
-
-Release build
-^^^^^^^^^^^^^
-
-- Submit the run-rebuild job with your parameters (eg. ``14.0`` ``v14.0``)
-
-- At this point you should not be seeing master-g type references as eups
-  versions. Everything should have a tag-derviced version such as ``14.0`` if
-  they are a DM repo and their semantic tag (eg. ``pyfits 3.0``) if they are
-  external.  If you see one, you need to chase down why. The only situation
-  that should happen is if a third party but a branch is used for LSST
-  development that lacks any other type of semantic versioning (in the ``14.0``
-  release this included starlink_ast and jointcal_cholmod.
-
-- Note your final ``bNNNN`` number for the publish (either from the build log
-  or by looking at the next of the annotated ``14.0`` tag on any repo eg. afw).
-
-- Submit the run-publish job making sure you have selected ``package`` and not
-  ``git`` as the option.
-
 
 Other OS checking
 ^^^^^^^^^^^^^^^^^
@@ -283,15 +463,6 @@ etc) by spinning up machines on Digital Ocean (typically) and following the
 user install instructions. This also allows us to check the user from-scratch
 installation instructions including the pre-requisites.
 
-
-
-Binaries
---------
-
-Run the tarball-matrix job with the options ``SMOKE``, ``RUN_SCONS_CHECK``,
-``PUBLISH``.
-
-
 Documentation
 -------------
 
@@ -299,7 +470,7 @@ Documentation to be collected for the release notes in ``pipelines_lsst_io``
 is:
 
 - Release notes from the T/CAMs for Pipelines, SUI, and DAX
-- Characterisation report from the DM or SQuaRE scientist
+- Characterization report from the DM or SQuaRE scientist
 - Known issues and pre-requisites from the T/CAM for SQuaRE
 - Before merging to master, ask the Documentation Engineer to review
 
