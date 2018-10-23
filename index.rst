@@ -70,9 +70,6 @@ In gross, the conceptual steps are:
 #. A successful weekly release is identified that forms the basis for the
    official release.
 
-#. (NOT YET IMPLIMENTED) Create a release branch across all EUPS product (DM + external + Aux???)
-   repositories.
-
 #. The first release candidate (``rc1``) is created using that weekly build as a seed.
    This means that it does not matter if the codebase's master has moved on in
    the meanwhile.
