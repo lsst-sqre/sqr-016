@@ -111,7 +111,8 @@ channel and inform all DM T/CAMs and the DM System Engineer.
 If it is generally a good time, identify the nearest weekly release, this will
 be the seed for the release candidate.
 
-Next, start a community.lsst.org post to use for status updates.
+Next, start a https://community.lsst.org post to use for status updates using
+the clo-stubb_.
 
 
 Preparing for a candidate release
@@ -471,6 +472,8 @@ is:
 - Known issues and pre-requisites from the T/CAM for SQuaRE
 - Before merging to master, ask the Documentation Engineer to review
 
+
+.. _clo-stubb:
 
 c.l.o stubb
 -----------
