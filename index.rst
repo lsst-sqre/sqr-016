@@ -129,8 +129,13 @@ At this point you should branch ``lsst/pipelines_lsst_io``
 
 
 
-Preparing for a candidate release
----------------------------------
+Making a Manual Release
+-----------------------
+
+**The official release process is captured as a jenkins job:
+https://ci.lsst.codes/job/release/job/official-release/ which should be
+prefered over manually enumerating all of the release steps**
+
 
 Get codekit installed
 ^^^^^^^^^^^^^^^^^^^^^
