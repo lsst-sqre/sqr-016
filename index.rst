@@ -314,15 +314,30 @@ Branch, Merge, Tag
 ^^^^^^^^^^^^^^^^^^
 
 Any git repository that needs to be modified for additional ``rc`` should be
-**branched**, have the nessicary changes merged (**TBD**: merge to master and
+**branched** and have the nessicary changes merged to a release branch.  Eg.,
+if changes were needed in ``v42_0_0_rc1`` a branch along the lines of ``v42.x``
+should be created in the repos that need changes. (**TBD**: merge to master and
 cherry-pick to release branch or merge to release branch and merge to
 ``master``???)
 
 Produce new manifest (``manifest ID``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Use manifest ID as input to the first ``rc`` process
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Use the previous ``rc`` tag along with the release branch to produce a new
+manifest.  Ensure that the release branch is specified to the right of the
+``rc`` in the listing of git refs.
+
+https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
+
+The resulting manifest ID needs to be retrieved to use as input for subsequent
+jobs.
+
+.. code-block::
+
+    REFS: v42.0.0.rc1 v42.x
+    PRODUCTS: lsst_distrib
+    BUILD_DOCS: false
+    PREP_ONLY: true
 
 Final Release
 -------------
