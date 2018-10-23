@@ -111,8 +111,22 @@ channel and inform all DM T/CAMs and the DM System Engineer.
 If it is generally a good time, identify the nearest weekly release, this will
 be the seed for the release candidate.
 
+Announce start of release process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Next, start a https://community.lsst.org post to use for status updates using
 the clo-stubb_.
+
+Branching the docs
+^^^^^^^^^^^^^^^^^^
+
+At this point you should branch ``lsst/pipelines_lsst_io``
+
+.. code-block:: bash
+
+   git clone https://github.com/lsst/pipelines_lsst_io.git
+   git checkout -b 14.0
+
 
 
 Preparing for a candidate release
@@ -130,16 +144,6 @@ If you are working interactively you want to set the environment variable
 the Github REST API calls.
 
 
-
-Branching the docs
-^^^^^^^^^^^^^^^^^^
-
-At this point you should branch ``lsst/pipelines_lsst_io``
-
-.. code-block:: bash
-
-   git clone https://github.com/lsst/pipelines_lsst_io.git
-   git checkout -b 14.0
 
 1st Release Candidate
 ---------------------
