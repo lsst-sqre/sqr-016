@@ -229,7 +229,7 @@ Build and Publish eups ``eupspkg`` packages + eups tag
 
 https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
 
-The resulting manifest ID needs to be retrieve to use as input for subsequent
+The resulting manifest ID needs to be retrieved to use as input for subsequent
 jobs.
 
 .. code-block::
@@ -306,7 +306,7 @@ https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Fvalidate_drp/activity
 -------------------------
 
 **Any subsequent ``rc` differs slightly from the initial ``rc1`` process
-because it inherently is not identical as a previous ``git tag`` (if it was,
+because it inherently is not identical to a previous ``git tag`` (if it was,
 there would be no reason to produce another ``rc``). The creation of a git
 release branch prior to ``rc1`` would eliminate the differences.**
 
