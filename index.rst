@@ -99,13 +99,12 @@ basic steps of:
 
 #. ``validate_drp`` is run with results published to ``squash``.
 
-
 Kicking-off the process
 -----------------------
 
 The first step is to establish whether it is a good time to make a release, eg.
 if many developers are about to push significant features, it may be better to
-wait for them to finish. Announce the intent to make a release in the #dm
+wait for them to finish. Announce the intent to make a release in the ``#dm``
 channel and inform all DM T/CAMs and the DM System Engineer.
 
 If it is generally a good time, identify the nearest weekly release, this will
@@ -134,8 +133,7 @@ Making a Manual Release
 
 **The official release process is captured as a jenkins job:
 https://ci.lsst.codes/job/release/job/official-release/ which should be
-prefered over manually enumerating all of the release steps**
-
+prefered over manually enumerating all of the release steps.**
 
 Get codekit installed
 ---------------------
@@ -147,8 +145,6 @@ https://github.com/lsst-sqre/sqre-codekit
 If you are working interactively you want to set the environment variable
 ``DM_SQUARE_DEBUG`` to ``1`` as it gives more insight on what is going on with
 the Github REST API calls.
-
-
 
 1st Release Candidate
 ---------------------
@@ -384,7 +380,6 @@ this time we use numeric tags so that eups will see them:
      --debug \
      --candidate 'v14_0_rc2 \
      '14.0' 'b3176'
-
 
 Release build
 ^^^^^^^^^^^^^
