@@ -54,7 +54,7 @@
 
 
 The LSST Stack Release Process
-------------------------------
+==============================
 
 The LSST stack is a large mixed Python/C++ codebase split among many repos with
 multiple dependencies between them built by a niche build system. The release
@@ -130,7 +130,7 @@ At this point you should branch ``lsst/pipelines_lsst_io``
 
 
 Making a Manual Release
------------------------
+=======================
 
 **The official release process is captured as a jenkins job:
 https://ci.lsst.codes/job/release/job/official-release/ which should be
@@ -138,7 +138,7 @@ prefered over manually enumerating all of the release steps**
 
 
 Get codekit installed
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 The release manager can follow the instructions at:
 
@@ -469,7 +469,7 @@ is:
 .. _clo-stubb:
 
 c.l.o stubb
------------
+===========
 
 .. code-block:: none
 
@@ -518,7 +518,7 @@ c.l.o stubb
 
 
 Github teams
-------------
+============
 
 There are three "special" teams in the LSST Github org:
 
@@ -551,10 +551,10 @@ These are used in the release process in the following way:
 
 
 Format of "tags"
-----------------
+================
 
 git tags
-^^^^^^^^
+--------
 
 - DM produced code this is part of an "official" release  **must** have a git
   tag that starts with a *number*
@@ -658,8 +658,9 @@ v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
 42.0.0        v42.0.0       v42_0_0
 ============  ============  ========
 
+
 Conda Environment/Packages Update
----------------------------------
+=================================
 
 There are conflicting pressures of updating the conda package list frequently
 to minimize the ammount of [likely] breakage at one time and resisting changes
@@ -667,7 +668,7 @@ as the git ``sha1`` of the conda environment files is used to defined the
 ``ABI`` of the eups ``tarball`` packages.
 
 Adding a new Conda package
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 
 #. The name of the package needs to "bleed" or un-versioned environment files in
    the ``lsst/lsstsw`` repo. Which are:
