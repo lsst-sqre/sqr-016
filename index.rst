@@ -99,6 +99,7 @@ basic steps of:
 
 #. ``validate_drp`` is run with results published to ``squash``.
 
+
 Kicking-off the process
 -----------------------
 
@@ -135,6 +136,7 @@ Making a Manual Release
 https://ci.lsst.codes/job/release/job/official-release/ which should be
 prefered over manually enumerating all of the release steps.**
 
+
 Get codekit installed
 ---------------------
 
@@ -145,6 +147,7 @@ https://github.com/lsst-sqre/sqre-codekit
 If you are working interactively you want to set the environment variable
 ``DM_SQUARE_DEBUG`` to ``1`` as it gives more insight on what is going on with
 the Github REST API calls.
+
 
 1st Release Candidate
 ---------------------
@@ -307,6 +310,7 @@ https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Fvalidate_drp/activity
     EUPS_TAG: v42_0_0_rc1
     RELEASE_IMAGE: lsstsqre/centos:7-stack-lsst_distrib-v42_0_0_rc1
 
+
 2nd+ Release Candidate(s)
 -------------------------
 
@@ -343,6 +347,7 @@ jobs.
     PRODUCTS: lsst_distrib
     BUILD_DOCS: false
     PREP_ONLY: true
+
 
 Final Release
 -------------
@@ -512,6 +517,7 @@ c.l.o stubb
   1. **Email announcement**
 
 
+
 Github teams
 ============
 
@@ -545,8 +551,10 @@ These are used in the release process in the following way:
   be members of ``DM Externals``.
 
 
+
 Format of "tags"
 ================
+
 
 git tags
 --------
@@ -654,6 +662,7 @@ v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
 ============  ============  ========
 
 
+
 Conda Environment/Packages Update
 =================================
 
@@ -661,6 +670,7 @@ There are conflicting pressures of updating the conda package list frequently
 to minimize the ammount of [likely] breakage at one time and resisting changes
 as the git ``sha1`` of the conda environment files is used to defined the
 ``ABI`` of the eups ``tarball`` packages.
+
 
 Adding a new Conda package
 --------------------------
