@@ -478,10 +478,10 @@ c.l.o stubb
   -------------------------------
 
   1. Eups publish rc1 candidate (based on b2748) (also w_2017_33)
-  1. Git Tag v14.0-rc1
+  1. Git Tag v14.0.rc1
   1. Branch v14 of newinstall.sh
   1. **Wait for first round of bugs to clear**
-  1.Repeat last 2 steps, -rcN candidates  <-- final candidate is rc1 [yay!]
+  1.Repeat last 2 steps, .rcN candidates  <-- final candidate is rc1 [yay!]
   1. Confirm DM Externals are at stable tags
   1. Tag DM Auxilliary (non-lsst_distrib) repos
   1. Full OS testing (see https://ls.st/faq )
