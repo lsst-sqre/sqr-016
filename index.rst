@@ -86,19 +86,6 @@ In gross, the conceptual steps are:
    accepted ``rc`` and final release code should be identitical except for the
    name of git/eups tags) and the documentation merged to ``master``.
 
-Each ``rc`` and the final release should built and published using the same
-basic steps of:
-
-#. ``eups`` source or ``eupspkg`` packages + an ``eups tag`` are published.
-
-#. ``eups`` binary or ``tarball`` packages + ``eups tag`` (s) are published.
-
-#. A ``science pipelines`` docker image is published.
-
-#. A ``jupyterlab`` docker image is published.
-
-#. ``validate_drp`` is run with results published to ``squash``.
-
 
 Kicking-off the process
 -----------------------
