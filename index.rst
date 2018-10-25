@@ -138,7 +138,7 @@ See git-tags_ for details on the formatting of git tags.
 
 Example:
 
-.. code-block::
+.. code-block:: text
 
    SOURCE_GIT_REFS: w.1999.42
    RELEASE_GIT_TAG: v42.0.0.rc1
@@ -184,7 +184,7 @@ the ``rc`` in the listing of git refs.
 
 Example 1:
 
-.. code-block::
+.. code-block:: text
 
    SOURCE_GIT_REFS: v42.0.0.rc1 v42.x
    RELEASE_GIT_TAG: v42.0.0.rc2
@@ -192,7 +192,7 @@ Example 1:
 
 Example 2:
 
-.. code-block::
+.. code-block:: text
 
    SOURCE_GIT_REFS: v42.0.0.rc5 v42.x
    RELEASE_GIT_TAG: v42.0.0.rc6
@@ -225,7 +225,7 @@ Run the jenkins `release/official-release <official-release>`_ job.
 For input **must only be** the latest ``rc`` tag.
 Example 1:
 
-.. code-block::
+.. code-block:: text
 
    SOURCE_GIT_REFS: v42.0.0.rc6
    RELEASE_GIT_TAG: 42.0.0
@@ -251,7 +251,7 @@ Branch `lsst/lsst <lsst>`_:
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this
 newinstall to be one associated with the current branch:
 
-.. code-block:: bash
+.. code-block:: text
 
    NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/14.0/scripts/newinstall.sh"
 
@@ -305,7 +305,7 @@ installation instructions including the pre-requisites.
 c.l.o stubb
 ===========
 
-.. code-block:: none
+.. code-block:: text
 
   Here is where we currently are in the release process. Current step in bold.
 
@@ -414,7 +414,7 @@ git tags
 
 Examples of *valid* (good) git tags
 
-.. code-block:: none
+.. code-block:: text
 
   # unofficial builds
   d.2038.01.19
@@ -431,7 +431,7 @@ Examples of *valid* (good) git tags
 
 Examples of *invalid* (bad) git tags
 
-.. code-block:: none
+.. code-block:: text
 
   d_2038_01_19
   w_2038_03
@@ -457,7 +457,7 @@ eups tags
 
 Examples of *valid* (good) eups tags
 
-.. code-block:: none
+.. code-block:: text
 
   # unofficial builds
   d_2038_01_19
@@ -471,7 +471,7 @@ Examples of *valid* (good) eups tags
 
 Examples of *invalid* (bad) eup tags
 
-.. code-block:: none
+.. code-block:: text
 
   123
   d.2038.01.19
@@ -661,7 +661,7 @@ https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
 The resulting manifest ID needs to be retrieved to use as input for subsequent
 jobs.
 
-.. code-block::
+.. code-block:: text
 
     REFS: v42.0.0.rc1
     PRODUCTS: lsst_distrib
@@ -669,7 +669,7 @@ jobs.
 
 https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-publish/activity
 
-.. code-block::
+.. code-block:: text
 
     PRODUCTS: lsst_distrib
     EUPSPKG_SOURCE: git
@@ -685,7 +685,7 @@ so as to have more explicit control over the parameters.
 
 https://ci.lsst.codes/blue/organizations/jenkins/release%2Ftarball-matrix/activity
 
-.. code-block::
+.. code-block:: text
 
     PRODUCTS: lsst_distrib
     EUPS_TAG: v42_0_0_rc1
@@ -698,7 +698,7 @@ Build and Publish ``scipipe`` docker image
 
 https://ci.lsst.codes/blue/organizations/jenkins/release%2Fdocker%2Fbuild-stack/activity
 
-.. code-block::
+.. code-block:: text
 
     PRODUCTS: lsst_distrib
     TAG: v42_0_0_rc1  # eups tag
@@ -709,7 +709,7 @@ Build and Publish ``jupyterlab`` docker image
 
 https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Finfra%2Fbuild-jupyterlabdemo/activity
 
-.. code-block::
+.. code-block:: text
 
     WIPEOUT: true
     MANIFEST_ID: bXXXX
@@ -723,7 +723,7 @@ Run ``validate_drp``
 
 https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Fvalidate_drp/activity
 
-.. code-block::
+.. code-block:: text
 
     WIPEOUT: true
     MANIFEST_ID: bXXXX
@@ -747,7 +747,7 @@ https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
 The resulting manifest ID needs to be retrieved to use as input for subsequent
 jobs.
 
-.. code-block::
+.. code-block:: text
 
     REFS: v42.0.0.rc1 v42.x
     PRODUCTS: lsst_distrib
@@ -772,7 +772,6 @@ this time we use numeric tags so that eups will see them:
 .. code-block:: bash
 
    # tag repos involved in the final candidate as the final build
-
    github-tag-version \
      --org lsst \
      --allow-team 'Data Management' \
