@@ -112,13 +112,13 @@ the release process.
 .. code-block:: bash
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
-   git checkout -b 14.0
+   git checkout -b v42.0.x
 
 Identify base weekly build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Identify the *git tag* of the weekly build you wish to base the release release
-candidate upon, say ``w.1999.42``.  This should be determined by discussion
+candidate upon, say ``w.9999.42``.  This should be determined by discussion
 with the product owner and team developer.
 
 
@@ -138,7 +138,7 @@ Example:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: w.1999.42
+   SOURCE_GIT_REFS: w.9999.42
    RELEASE_GIT_TAG: v42.0.0.rc1
    O_LATEST: false
 
@@ -160,13 +160,13 @@ because it inherently is not identical to a previous ``git tag`` (if it was,
 there would be no reason to produce another ``rc``). The creation of a git
 release branch prior to ``rc1`` would eliminate the differences.**
 
-Branch, Merge, Tag
-^^^^^^^^^^^^^^^^^^
+Branch, Merge
+^^^^^^^^^^^^^
 
 Any git repository that needs to be modified for additional ``rc`` releases
 should be **branched** and have the necessary changes merged to a release
 branch.  Eg., if changes were needed in ``v42.0.0.rc1`` a "release branch"
-along the lines of ``v42.x`` should be created in the repos that need changes.
+along the lines of ``v42.0.x`` should be created in the repos that need changes.
 
 (**TBD**: merge to master and cherry-pick to release branch or merge to release
 branch and merge to ``master``???)
@@ -198,7 +198,7 @@ Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.x v42.0.0.rc1
+   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc1
    RELEASE_GIT_TAG: v42.0.0.rc2
    O_LATEST: false
 
@@ -206,7 +206,7 @@ Example 2:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.x v42.0.0.rc5
+   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc5
    RELEASE_GIT_TAG: v42.0.0.rc6
    O_LATEST: false
 
@@ -265,14 +265,14 @@ Branch `lsst/lsst <lsst>`_:
 .. code-block:: bash
 
    git clone https://github.com/lsst/lsst.git
-   git checkout -b 42.0.0
+   git checkout -b v42.0.x
 
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this
 newinstall to be one associated with the current branch:
 
 .. code-block:: text
 
-   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/14.0/scripts/newinstall.sh"
+   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v42.0.x/scripts/newinstall.sh"
 
 and commit and push.
 
@@ -343,15 +343,14 @@ c.l.o stubb
   Release Engineering Steps
   -------------------------------
 
-  1. Eups publish rc1 candidate (based on b2748) (also w_2017_33)
-  1. Git Tag v14.0.rc1
-  1. Branch v14 of newinstall.sh
+  1. Build and publish rc1 release candidate (based on w.9999.42)
+  1. Branch v42.0.x of newinstall.sh
   1. **Wait for first round of bugs to clear**
   1.Repeat last 2 steps, .rcN candidates  <-- final candidate is rc1 [yay!]
   1. Confirm DM Externals are at stable tags
   1. Tag DM Auxilliary (non-lsst_distrib) repos
   1. Full OS testing (see https://ls.st/faq )
-  1. Git Tag 14.0, rebuild, eups publish
+  1. Git Tag 42.0.0, rebuild, eups publish
 
   Binary release steps
   ------------------------
@@ -385,17 +384,17 @@ There are three "special" teams in the LSST Github org:
 These are used in the release process in the following way:
 
 - ``Data Management`` repos are a dependency of ``lsst_distrib`` and should be
-  tagged with the bare release version, eg. ``14.0``, unless the repo is also a
-  member of the ``DM Externals`` team.  All repos tagged as part of a release
+  tagged with the bare release version, eg. ``42.0.0``, unless the repo is also
+  a member of the ``DM Externals`` team.  All repos tagged as part of a release
   should be members of the ``Data Management`` team to ensure that DM
   developers are able to modify all components of a release.
 
 - ``DM Externals`` also indicates a dependency of ``lsst_distrib`` but one that
-  is tagged with a ``v`` prefix in front of the release version. Eg., ``v14.0``
-  This is required because ``lsst-build`` derives the eups product version
-  string from git tags that begin with a number.  DM developers prefer that
-  eups display external packages version string rather than of a DM composite
-  release. Thus the ``v`` prefix causes the git tag to be ignored by
+  is tagged with a ``v`` prefix in front of the release version. Eg.,
+  ``v42.0.0`` This is required because ``lsst-build`` derives the eups product
+  version string from git tags that begin with a number.  DM developers prefer
+  that eups display external packages version string rather than of a DM
+  composite release. Thus the ``v`` prefix causes the git tag to be ignored by
   ``lsst_distrib``.  "External" repos must not also be members of ``DM
   Auxilliaries``.
 
@@ -624,7 +623,7 @@ a git repo known to be part of the weekly build.
     $ git tag w.2017.33 -n1
     w.2017.33       Version w.2017.33 release from w.2017.33/b2999
 
-In the above example, the manifest ID is ``b29999``.
+In the above example, the manifest ID is ``b2999``.
 
 *git tag* the candidate
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -767,7 +766,7 @@ jobs.
 
 .. code-block:: text
 
-    REFS: v42.x v42.0.0.rc1
+    REFS: v42.0.x v42.0.0.rc1
     PRODUCTS: lsst_distrib
     BUILD_DOCS: false
     PREP_ONLY: true
@@ -779,42 +778,54 @@ Final Release
 Final tag
 ^^^^^^^^^
 
-XXX failures are now fatal...
-
-Now it's time to lay down the final git tag. For repositories that have already
-been branched with the ``14.0`` ref, that will fail, which is fine.
-
 This is mostly a repeat of the process for laying down the candidate tag but
 this time we use numeric tags so that eups will see them:
 
 .. code-block:: bash
 
-   # tag repos involved in the final candidate as the final build
    github-tag-version \
+     --debug \
+     --token **** \
+     --user sqreadmin \
+     --email sqre-admin@lists.lsst.org \
      --org lsst \
      --allow-team 'Data Management' \
      --allow-team 'DM Externals' \
      --external-team 'DM Externals' \
      --deny-team 'DM Auxilliaries' \
-     --debug \
-     --candidate 'v14_0_rc2 \
-     '14.0' 'b3176'
+     --manifest-only \
+     --manifest b9999 \
+     42.0.0
+
+.. code-block:: bash
+
+    github-tag-teams \
+      --debug \
+      --token **** \
+      --user sqreadmin \
+      --email sqre-admin@lists.lsst.org \
+      --org lsst \
+      --allow-team 'DM Auxilliaries' \
+      --deny-team 'DM Externals' \
+      --ignore-existing-tag \
+      --tag v42.0.0
 
 Release build
 ^^^^^^^^^^^^^
 
-- Submit the run-rebuild job with your parameters (eg. ``14.0`` ``v14.0``)
+- Submit the run-rebuild job with your parameters (eg. ``42.0.0`` ``v42.0.0``)
 
 - At this point you should not be seeing master-g type references as eups
-  versions. Everything should have a tag-derived version such as ``14.0`` if
+  versions. Everything should have a tag-derived version such as ``42.0.0`` if
   they are a DM repo and their semantic tag (eg. ``pyfits 3.0``) if they are
   external.  If you see one, you need to chase down why. The only situation
   that should happen is if a third party but a branch is used for LSST
-  development that lacks any other type of semantic versioning (in the ``14.0``
+  development that lacks any other type of semantic versioning (in the
+  ``42.0.0``
   release this included starlink_ast and jointcal_cholmod.
 
 - Note your final ``bNNNN`` number for the publish (either from the build log
-  or by looking at the next of the annotated ``14.0`` tag on any repo eg. afw).
+  or by looking at the next of the annotated ``42.0.0`` tag on any repo eg. afw).
 
 - Submit the run-publish job making sure you have selected ``package`` and not
   ``git`` as the option.
