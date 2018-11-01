@@ -179,14 +179,14 @@ Build and Publish
 Run the jenkins `release/official-release <official-release>`_ job.
 
 For input source git refs use the previous ``rc`` tag along with the release
-branch(es)t.  **Ensure** that the release branch is specified to the right of
-the ``rc`` in the listing of git refs.
+branch(es)t.  **Ensure** that the release branch is specified to the **left** of
+the ``rcX`` tag in the listing of git refs.
 
 Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.0.rc1 v42.x
+   SOURCE_GIT_REFS: v42.x v42.0.0.rc1
    RELEASE_GIT_TAG: v42.0.0.rc2
    O_LATEST: false
 
@@ -194,7 +194,7 @@ Example 2:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.0.rc5 v42.x
+   SOURCE_GIT_REFS: v42.x v42.0.0.rc5
    RELEASE_GIT_TAG: v42.0.0.rc6
    O_LATEST: false
 
@@ -739,8 +739,7 @@ Produce new manifest (``manifest ID``)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use the previous ``rc`` tag along with the release branch to produce a new
-manifest.  Ensure that the release branch is specified to the right of the
-``rc`` in the listing of git refs.
+manifest.
 
 https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
 
@@ -749,7 +748,7 @@ jobs.
 
 .. code-block:: text
 
-    REFS: v42.0.0.rc1 v42.x
+    REFS: v42.x v42.0.0.rc1
     PRODUCTS: lsst_distrib
     BUILD_DOCS: false
     PREP_ONLY: true
