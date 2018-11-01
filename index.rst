@@ -53,8 +53,8 @@
 
 
 
-The LSST Stack Release Process
-==============================
+The LSST Science Pipelines Release Process
+==========================================
 
 The LSST stack is a large mixed Python/C++ codebase split among many repos with
 multiple dependencies between them built by a niche build system. The release
