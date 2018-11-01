@@ -47,8 +47,6 @@
 
 .. note::
 
-   **This technote is not yet published.**
-
    SQuaRE instructions for making official releases
 
 
