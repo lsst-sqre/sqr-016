@@ -171,6 +171,20 @@ along the lines of ``v42.x`` should be created in the repos that need changes.
 (**TBD**: merge to master and cherry-pick to release branch or merge to release
 branch and merge to ``master``???)
 
+Test Release Branch(es)
+^^^^^^^^^^^^^^^^^^^^^^^
+
+As a sanity check, run the jenkins `stack-os-matrix <stack-os-matrix>`_ job to
+verify that the release branch + previous ``rcX`` tag combination is buildable
+prior to attempting to build and publish the new ``rc``.
+
+Example 1:
+
+.. code-block:: text
+
+   REFS: v42.0.x v42.0.0.rc1
+   PRODUCTS: lsst_distrib lsst_ci
+
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
@@ -811,3 +825,4 @@ Release build
 .. _clo: https://community.lsst.org
 .. _lsst: https://github.com/lsst/lsst
 .. _newinstall.sh: https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh
+.. _stack-os-matrix: https://ci.lsst.codes/blue/organizations/jenkins/stack-os-matrix/activity
