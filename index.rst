@@ -507,7 +507,7 @@ Conda Environment/Packages Update
 =================================
 
 There are conflicting pressures of updating the conda package list frequently
-to minimize the ammount of [likely] breakage at one time and resisting changes
+to minimize the amount of [likely] breakage at one time and resisting changes
 as the git ``sha1`` of the conda environment files is used to defined the
 ``ABI`` of the eups ``tarball`` packages.
 
@@ -555,7 +555,7 @@ Adding a new Conda package
 #. The ~last major release should be rebuilt in the new "ABI" ``EUPS_PKGROOT`` so
    that that newinstall.sh from master will still be able to do a binary
    install of the current major release.  This may be done by triggering a
-   jenknins ``release/tarball-matrix`` build.
+   Jenkins ``release/tarball-matrix`` build.
 
 
 
@@ -564,7 +564,7 @@ Making a Manual Release
 
 **The official release process is captured as a jenkins job:
 https://ci.lsst.codes/job/release/job/official-release/ which should be
-prefered over manually enumerating all of the release steps.**
+preferred over manually enumerating all of the release steps.**
 
 
 Get codekit installed
