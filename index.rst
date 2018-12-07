@@ -190,8 +190,8 @@ Build and Publish
 Run the jenkins official-release_ job.
 
 For input source git refs use the previous ``rc`` tag along with the release
-branch(es)t.  **Ensure** that the release branch is specified to the **left**
-of the ``rcX`` tag in the listing of git refs.
+branch(es).  **Ensure** that the release branch is specified to the **left** of
+the ``rcX`` tag in the listing of git refs.
 
 Example 1:
 
