@@ -333,36 +333,21 @@ c.l.o stubb
 
   Here is where we currently are in the release process. Current step in bold.
 
-  Summary
-  -----------
-
-  Release is complete
-
   Precursor Steps
   ---------------------------------
 
   1. Identify any pre-release blockers ("must-have features") :tools:
   2. Wait for them to clear
 
-
   Release Engineering Steps
   -------------------------------
 
+  1. Branch 888.0.x of newinstall.sh
   1. Build and publish rc1 release candidate (based on w.9999.52)
-  1. Branch v888.0.x of newinstall.sh
   1. **Wait for first round of bugs to clear**
-  1.Repeat last 2 steps, .rcN candidates  <-- final candidate is rc1 [yay!]
-  1. Confirm DM Externals are at stable tags
-  1. Tag DM Auxilliary (non-lsst_distrib) repos
+  1. Build and publish additional rcX releases if/as necessary
   1. Full OS testing (see https://ls.st/faq )
-  1. Git Tag 888.0.0, rebuild, eups publish
-
-  Binary release steps
-  ------------------------
-
-  1. Produce factory binaries
-  1. Test factory binaries
-  1. Gather contributed binaries
+  1. Build and publish final release
 
   Documentation Steps
   -------------------------
