@@ -99,15 +99,13 @@ be the seed for the release candidate.
 Announce start of release process
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Next, start a `community.lsst.org <clo>`_ post to use for status updates using
-the clo-stubb_.
+Next, start a clo_ post to use for status updates using the clo-stubb_.
 
 Branching the docs
 ^^^^^^^^^^^^^^^^^^
 
-At this point you should branch `lsst/pipelines_lsst_io <pipelines_lsst_io>`_
-so as not to capture any changes on the ``master`` branch that may occur during
-the release process.
+At this point you should branch pipelines_lsst_io_.  so as not to capture any
+changes on the ``master`` branch that may occur during the release process.
 
 .. code-block:: bash
 
@@ -129,9 +127,9 @@ with the product owner and team developer.
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.  The source
-git refs should be only the tag of the "seed" weekly release.  The release tag
-**must** start with a ``v`` and end with ``.rc1``.
+Run the jenkins official-release_ job.  The source git refs should be only the
+tag of the "seed" weekly release.  The release tag **must** start with a ``v``
+and end with ``.rc1``.
 
 See git-tags_ for details on the formatting of git tags.
 
@@ -146,7 +144,7 @@ Example:
 Announce rc1
 ^^^^^^^^^^^^
 
-Update the release status `community.lsst.org <clo>`_ post to to announce the
+Update the release status clo_ post to to announce the
 availability of ``rc1``.
 
 
@@ -175,9 +173,9 @@ branch and merge to ``master``???)
 Test Release Branch(es)
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-As a sanity check, run the jenkins `stack-os-matrix <stack-os-matrix>`_ job to
-verify that the release branch + previous ``rcX`` tag combination is buildable
-prior to attempting to build and publish the new ``rc``.
+As a sanity check, run the jenkins stack-os-matrix_ job to verify that the
+release branch + previous ``rcX`` tag combination is buildable prior to
+attempting to build and publish the new ``rc``.
 
 Example 1:
 
@@ -189,11 +187,11 @@ Example 1:
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.
+Run the jenkins official-release_ job.
 
 For input source git refs use the previous ``rc`` tag along with the release
-branch(es)t.  **Ensure** that the release branch is specified to the **left** of
-the ``rcX`` tag in the listing of git refs.
+branch(es)t.  **Ensure** that the release branch is specified to the **left**
+of the ``rcX`` tag in the listing of git refs.
 
 Example 1:
 
@@ -233,7 +231,7 @@ prior to the production of ``eupspkg``/*eups tag*.
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.
+Run the jenkins official-release_ job.
 
 The source input **must only be** the latest ``rc`` tag.
 
@@ -261,7 +259,7 @@ such example is the ``lsst`` repo since it contains newinstall.sh_ which
 sets the version of eups, and that may be different for an official release
 than the current bleed.
 
-Branch `lsst/lsst <lsst>`_:
+Branch the lsst_ repo:
 
 .. code-block:: bash
 
