@@ -238,11 +238,11 @@ Run the jenkins official-release_ job.
 
 The source input **must only be** the latest ``rc`` tag.
 
-**The ``O_LATEST`` flag controls if the produced science pipelines docker image
+The ``O_LATEST`` flag controls if the produced science pipelines docker image
 has the ``-o_latest`` docker tags applied to it.  This should only be set on a
 final release AND only if the release is the highest version release.  For
 example, if ``99.0.0`` has been release and a ``98.0.1`` bugfix release is
-being made, ``O_LATEST`` should not be set.**
+being made, ``O_LATEST`` should not be set.
 
 Example 1:
 
