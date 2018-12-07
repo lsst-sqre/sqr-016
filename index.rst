@@ -107,17 +107,19 @@ Branching the docs
 At this point you should branch pipelines_lsst_io_.  so as not to capture any
 changes on the ``master`` branch that may occur during the release process.
 
+Note that the branch does not have a ``v`` prefix.
+
 .. code-block:: bash
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
-   git checkout -b v42.0.x
-   git push -u origin v42.0.x
+   git checkout -b 888.0.x
+   git push -u origin 888.0.x
 
 Identify base weekly build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Identify the *git tag* of the weekly build you wish to base the release release
-candidate upon, say ``w.9999.42``.  This should be determined by discussion
+candidate upon, say ``w.9999.52``.  This should be determined by discussion
 with the product owner and team developer.
 
 
@@ -137,8 +139,8 @@ Example:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: w.9999.42
-   RELEASE_GIT_TAG: v42.0.0.rc1
+   SOURCE_GIT_REFS: w.9999.52
+   RELEASE_GIT_TAG: v888.0.0.rc1
    O_LATEST: false
 
 Announce rc1
@@ -164,8 +166,9 @@ Branch, Merge
 
 Any git repository that needs to be modified for additional ``rc`` releases
 should be **branched** and have the necessary changes merged to a release
-branch.  Eg., if changes were needed in ``v42.0.0.rc1`` a "release branch"
-along the lines of ``v42.0.x`` should be created in the repos that need changes.
+branch.  Eg., if changes were needed in ``v888.0.0.rc1`` a "release branch"
+along the lines of ``v888.0.x`` should be created in the repos that need
+changes.
 
 (**TBD**: merge to master and cherry-pick to release branch or merge to release
 branch and merge to ``master``???)
@@ -181,7 +184,7 @@ Example 1:
 
 .. code-block:: text
 
-   REFS: v42.0.x v42.0.0.rc1
+   REFS: v888.0.x v888.0.0.rc1
    PRODUCTS: lsst_distrib lsst_ci
 
 Build and Publish
@@ -197,16 +200,16 @@ Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc1
-   RELEASE_GIT_TAG: v42.0.0.rc2
+   SOURCE_GIT_REFS: v888.0.x v888.0.0.rc1
+   RELEASE_GIT_TAG: v888.0.0.rc2
    O_LATEST: false
 
 Example 2:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc5
-   RELEASE_GIT_TAG: v42.0.0.rc6
+   SOURCE_GIT_REFS: v888.0.x v888.0.0.rc5
+   RELEASE_GIT_TAG: v888.0.0.rc6
    O_LATEST: false
 
 Announce rcX
@@ -225,7 +228,7 @@ an alphabetic prefix (eg., ``v``).  This has the effect of changing the *eups*
 version strings as ``lsst-build`` sets the *eups* product version based on the
 most recent git ref that has an *integer* as the first character.
 
-As consequence of this behavior is that the final git tag **must** be present
+A consequence of this behavior is that the final git tag **must** be present
 prior to the production of ``eupspkg``/*eups tag*.
 
 Build and Publish
@@ -245,8 +248,8 @@ Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.0.rc6
-   RELEASE_GIT_TAG: 42.0.0
+   SOURCE_GIT_REFS: v888.0.0.rc6
+   RELEASE_GIT_TAG: 888.0.0
    O_LATEST: false
 
 Branch ``newinstall.sh`` repo
@@ -259,19 +262,22 @@ such example is the ``lsst`` repo since it contains newinstall.sh_ which
 sets the version of eups, and that may be different for an official release
 than the current bleed.
 
+Note that the branch does not have ``v`` prefix.
+
 Branch the lsst_ repo:
 
 .. code-block:: bash
 
    git clone https://github.com/lsst/lsst.git
-   git checkout -b v42.0.x
+   git checkout -b 888.0.x
+   git push -u origin 888.0.x
 
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this
 newinstall to be one associated with the current branch:
 
 .. code-block:: text
 
-   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v42.0.x/scripts/newinstall.sh"
+   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v888.0.x/scripts/newinstall.sh"
 
 and commit and push.
 
@@ -342,14 +348,14 @@ c.l.o stubb
   Release Engineering Steps
   -------------------------------
 
-  1. Build and publish rc1 release candidate (based on w.9999.42)
-  1. Branch v42.0.x of newinstall.sh
+  1. Build and publish rc1 release candidate (based on w.9999.52)
+  1. Branch v888.0.x of newinstall.sh
   1. **Wait for first round of bugs to clear**
   1.Repeat last 2 steps, .rcN candidates  <-- final candidate is rc1 [yay!]
   1. Confirm DM Externals are at stable tags
   1. Tag DM Auxilliary (non-lsst_distrib) repos
   1. Full OS testing (see https://ls.st/faq )
-  1. Git Tag 42.0.0, rebuild, eups publish
+  1. Git Tag 888.0.0, rebuild, eups publish
 
   Binary release steps
   ------------------------
@@ -383,14 +389,14 @@ There are three "special" teams in the LSST Github org:
 These are used in the release process in the following way:
 
 - ``Data Management`` repos are a dependency of ``lsst_distrib`` and should be
-  tagged with the bare release version, eg. ``42.0.0``, unless the repo is also
+  tagged with the bare release version, eg. ``888.0.0``, unless the repo is also
   a member of the ``DM Externals`` team.  All repos tagged as part of a release
   should be members of the ``Data Management`` team to ensure that DM
   developers are able to modify all components of a release.
 
 - ``DM Externals`` also indicates a dependency of ``lsst_distrib`` but one that
   is tagged with a ``v`` prefix in front of the release version. Eg.,
-  ``v42.0.0`` This is required because ``lsst-build`` derives the eups product
+  ``v888.0.0`` This is required because ``lsst-build`` derives the eups product
   version string from git tags that begin with a number.  DM developers prefer
   that eups display external packages version string rather than of a DM
   composite release. Thus the ``v`` prefix causes the git tag to be ignored by
@@ -416,7 +422,7 @@ git tags
 
 - "official" release git tags on external/third-party software that DM has
   repackaged must be prefixed with a ``v`` but are otherwise identical to that
-  on DM produced code. Eg., ``42.0.0 -> v42.0.0``
+  on DM produced code. Eg., ``888.0.0 -> v888.0.0``
 
 - Non-"official" releases, release candidates, weekly builds, etc. **must**
   start with a *letter*
@@ -434,27 +440,27 @@ Examples of *valid* (good) git tags
 .. code-block:: text
 
   # unofficial builds
-  d.2038.01.19
-  w.2038.03
+  d.9999.01.02
+  w.9999.52
 
   # release candidate
-  v42.0.0.rc99
+  v888.0.0.rc99
 
   # official release of DM produced code
-  42.0.0
+  888.0.0
 
   # official release of external/third-party product
-  v42.0.0
+  v888.0.0
 
 Examples of *invalid* (bad) git tags
 
 .. code-block:: text
 
-  d_2038_01_19
-  w_2038_03
-  v42-0-0-rc99
-  42_0_0
-  v42_0_0
+  d_9999_01_02
+  w_9999_52
+  v888-0-0-rc99
+  888_0_0
+  v888_0_0
   foo/bar
 
 eups tags
@@ -477,25 +483,25 @@ Examples of *valid* (good) eups tags
 .. code-block:: text
 
   # unofficial builds
-  d_2038_01_19
-  w_2038_03
+  d_9999_01_02
+  w_9999_52
 
   # release candidate
-  v42_0_0_rc99
+  v888_0_0_rc99
 
   # official release of DM produced code AND external/third-party product
-  v42_0_0
+  v888_0_0
 
 Examples of *invalid* (bad) eup tags
 
 .. code-block:: text
 
   123
-  d.2038.01.19
-  w.2038.03
-  v42_0_0-rc99
-  42.0.0
-  v42.0.0
+  d.9999.01.02
+  w.9999.52
+  v888_0-rc99
+  888.0.0
+  v888.0.0
   foo/bar
 
 git <-> eups tag conversion
@@ -504,14 +510,14 @@ git <-> eups tag conversion
 The "tags" along each row in the following table should be considered
 equivalent conversions.
 
-============  ============  ========
-internal git  external git  eups tag
-============  ============  ========
-d.2038.01.19  d.2038.01.19  d_2038_01_19
-w.2038.03     w.2038.03     w_2038_03
-v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
-42.0.0        v42.0.0       v42_0_0
-============  ============  ========
+=============  ============  =============
+internal git   external git  eups tag
+=============  ============  =============
+d.9999.01.02   d.9999.01.19  d_9999_01_02
+w.9999.52      w.9999.52     w_9999_52
+v888.0.0.rc99  v88.0.0.rc99  v888_0_0_rc99
+888.0.0        v888.0.0      v888_0_0
+=============  ============  =============
 
 
 
