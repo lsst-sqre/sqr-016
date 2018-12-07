@@ -113,6 +113,7 @@ the release process.
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
    git checkout -b v42.0.x
+   git push -u origin v42.0.x
 
 Identify base weekly build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
