@@ -123,6 +123,14 @@ Identify the *git tag* of the weekly build you wish to base the release release
 candidate upon, say ``w.9999.52``.  This should be determined by discussion
 with the product owner and team developer.
 
+Example method for listing weekly git tags:
+
+.. code-block:: bash
+
+   git clone https://github.com/lsst/lsst_distrib.git
+   cd lsst_distrib
+   git tag -l w.*
+
 
 1st Release Candidate
 ---------------------
