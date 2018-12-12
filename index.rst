@@ -165,7 +165,7 @@ availability of ``rc1``.
 An ``.rcX``, where X is ``> 1``, is only required if a problem is found with
 the initial ``rc``.
 
-**Any subsequent ``rc` differs slightly from the initial ``rc1`` process
+**Any subsequent ``rc`` differs slightly from the initial ``rc1`` process
 because it inherently is not identical to a previous ``git tag`` (if it was,
 there would be no reason to produce another ``rc``). The creation of a git
 release branch prior to ``rc1`` would eliminate the differences.**
