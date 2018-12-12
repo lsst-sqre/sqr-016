@@ -112,6 +112,7 @@ Note that the branch does not have a ``v`` prefix.
 .. code-block:: bash
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
+   cd pipelines_lsst_io
    git checkout -b 888.0.x
    git push -u origin 888.0.x
 
@@ -269,6 +270,7 @@ Branch the lsst_ repo:
 .. code-block:: bash
 
    git clone https://github.com/lsst/lsst.git
+   cd lsst
    git checkout -b 888.0.x
    git push -u origin 888.0.x
 
