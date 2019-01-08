@@ -99,27 +99,37 @@ be the seed for the release candidate.
 Announce start of release process
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Next, start a `community.lsst.org <clo>`_ post to use for status updates using
-the clo-stubb_.
+Next, start a clo_ post to use for status updates using the clo-stubb_.
 
 Branching the docs
 ^^^^^^^^^^^^^^^^^^
 
-At this point you should branch `lsst/pipelines_lsst_io <pipelines_lsst_io>`_
-so as not to capture any changes on the ``master`` branch that may occur during
-the release process.
+At this point you should branch pipelines_lsst_io_.  so as not to capture any
+changes on the ``master`` branch that may occur during the release process.
+
+Note that the branch does not have a ``v`` prefix.
 
 .. code-block:: bash
 
    git clone https://github.com/lsst/pipelines_lsst_io.git
-   git checkout -b v42.0.x
+   cd pipelines_lsst_io
+   git checkout -b 888.0.x
+   git push -u origin 888.0.x
 
 Identify base weekly build
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Identify the *git tag* of the weekly build you wish to base the release release
-candidate upon, say ``w.9999.42``.  This should be determined by discussion
+candidate upon, say ``w.9999.52``.  This should be determined by discussion
 with the product owner and team developer.
+
+Example method for listing weekly git tags:
+
+.. code-block:: bash
+
+   git clone https://github.com/lsst/lsst_distrib.git
+   cd lsst_distrib
+   git tag -l w.*
 
 
 1st Release Candidate
@@ -128,9 +138,9 @@ with the product owner and team developer.
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.  The source
-git refs should be only the tag of the "seed" weekly release.  The release tag
-**must** start with a ``v`` and end with ``.rc1``.
+Run the jenkins official-release_ job.  The source git refs should be only the
+tag of the "seed" weekly release.  The release tag **must** start with a ``v``
+and end with ``.rc1``.
 
 See git-tags_ for details on the formatting of git tags.
 
@@ -138,14 +148,14 @@ Example:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: w.9999.42
-   RELEASE_GIT_TAG: v42.0.0.rc1
+   SOURCE_GIT_REFS: w.9999.52
+   RELEASE_GIT_TAG: v888.0.0.rc1
    O_LATEST: false
 
 Announce rc1
 ^^^^^^^^^^^^
 
-Update the release status `community.lsst.org <clo>`_ post to to announce the
+Update the release status clo_ post to to announce the
 availability of ``rc1``.
 
 
@@ -155,18 +165,19 @@ availability of ``rc1``.
 An ``.rcX``, where X is ``> 1``, is only required if a problem is found with
 the initial ``rc``.
 
-**Any subsequent ``rc` differs slightly from the initial ``rc1`` process
+Any subsequent ``rc`` differs slightly from the initial ``rc1`` process
 because it inherently is not identical to a previous ``git tag`` (if it was,
 there would be no reason to produce another ``rc``). The creation of a git
-release branch prior to ``rc1`` would eliminate the differences.**
+release branch prior to ``rc1`` would eliminate the differences.
 
 Branch, Merge
 ^^^^^^^^^^^^^
 
 Any git repository that needs to be modified for additional ``rc`` releases
 should be **branched** and have the necessary changes merged to a release
-branch.  Eg., if changes were needed in ``v42.0.0.rc1`` a "release branch"
-along the lines of ``v42.0.x`` should be created in the repos that need changes.
+branch.  Eg., if changes were needed in ``v888.0.0.rc1`` a "release branch"
+along the lines of ``v888.0.x`` should be created in the repos that need
+changes.
 
 (**TBD**: merge to master and cherry-pick to release branch or merge to release
 branch and merge to ``master``???)
@@ -174,40 +185,40 @@ branch and merge to ``master``???)
 Test Release Branch(es)
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-As a sanity check, run the jenkins `stack-os-matrix <stack-os-matrix>`_ job to
-verify that the release branch + previous ``rcX`` tag combination is buildable
-prior to attempting to build and publish the new ``rc``.
+As a sanity check, run the jenkins stack-os-matrix_ job to verify that the
+release branch + previous ``rcX`` tag combination is buildable prior to
+attempting to build and publish the new ``rc``.
 
 Example 1:
 
 .. code-block:: text
 
-   REFS: v42.0.x v42.0.0.rc1
+   REFS: v888.0.x v888.0.0.rc1
    PRODUCTS: lsst_distrib lsst_ci
 
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.
+Run the jenkins official-release_ job.
 
 For input source git refs use the previous ``rc`` tag along with the release
-branch(es)t.  **Ensure** that the release branch is specified to the **left** of
+branch(es).  **Ensure** that the release branch is specified to the **left** of
 the ``rcX`` tag in the listing of git refs.
 
 Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc1
-   RELEASE_GIT_TAG: v42.0.0.rc2
+   SOURCE_GIT_REFS: v888.0.x v888.0.0.rc1
+   RELEASE_GIT_TAG: v888.0.0.rc2
    O_LATEST: false
 
 Example 2:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.x v42.0.0.rc5
-   RELEASE_GIT_TAG: v42.0.0.rc6
+   SOURCE_GIT_REFS: v888.0.x v888.0.0.rc5
+   RELEASE_GIT_TAG: v888.0.0.rc6
    O_LATEST: false
 
 Announce rcX
@@ -226,28 +237,28 @@ an alphabetic prefix (eg., ``v``).  This has the effect of changing the *eups*
 version strings as ``lsst-build`` sets the *eups* product version based on the
 most recent git ref that has an *integer* as the first character.
 
-As consequence of this behavior is that the final git tag **must** be present
+A consequence of this behavior is that the final git tag **must** be present
 prior to the production of ``eupspkg``/*eups tag*.
 
 Build and Publish
 ^^^^^^^^^^^^^^^^^
 
-Run the jenkins `release/official-release <official-release>`_ job.
+Run the jenkins official-release_ job.
 
 The source input **must only be** the latest ``rc`` tag.
 
-**The ``O_LATEST`` flag controls if the produced science pipelines docker image
+The ``O_LATEST`` flag controls if the produced science pipelines docker image
 has the ``-o_latest`` docker tags applied to it.  This should only be set on a
 final release AND only if the release is the highest version release.  For
 example, if ``99.0.0`` has been release and a ``98.0.1`` bugfix release is
-being made, ``O_LATEST`` should not be set.**
+being made, ``O_LATEST`` should not be set.
 
 Example 1:
 
 .. code-block:: text
 
-   SOURCE_GIT_REFS: v42.0.0.rc6
-   RELEASE_GIT_TAG: 42.0.0
+   SOURCE_GIT_REFS: v888.0.0.rc6
+   RELEASE_GIT_TAG: 888.0.0
    O_LATEST: false
 
 Branch ``newinstall.sh`` repo
@@ -260,19 +271,23 @@ such example is the ``lsst`` repo since it contains newinstall.sh_ which
 sets the version of eups, and that may be different for an official release
 than the current bleed.
 
-Branch `lsst/lsst <lsst>`_:
+Note that the branch does not have ``v`` prefix.
+
+Branch the lsst_ repo:
 
 .. code-block:: bash
 
    git clone https://github.com/lsst/lsst.git
-   git checkout -b v42.0.x
+   cd lsst
+   git checkout -b 888.0.x
+   git push -u origin 888.0.x
 
 Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this
 newinstall to be one associated with the current branch:
 
 .. code-block:: text
 
-   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v42.0.x/scripts/newinstall.sh"
+   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v888.0.x/scripts/newinstall.sh"
 
 and commit and push.
 
@@ -328,36 +343,21 @@ c.l.o stubb
 
   Here is where we currently are in the release process. Current step in bold.
 
-  Summary
-  -----------
-
-  Release is complete
-
   Precursor Steps
   ---------------------------------
 
   1. Identify any pre-release blockers ("must-have features") :tools:
   2. Wait for them to clear
 
-
   Release Engineering Steps
   -------------------------------
 
-  1. Build and publish rc1 release candidate (based on w.9999.42)
-  1. Branch v42.0.x of newinstall.sh
+  1. Branch 888.0.x of newinstall.sh
+  1. Build and publish rc1 release candidate (based on w.9999.52)
   1. **Wait for first round of bugs to clear**
-  1.Repeat last 2 steps, .rcN candidates  <-- final candidate is rc1 [yay!]
-  1. Confirm DM Externals are at stable tags
-  1. Tag DM Auxilliary (non-lsst_distrib) repos
+  1. Build and publish additional rcX releases if/as necessary
   1. Full OS testing (see https://ls.st/faq )
-  1. Git Tag 42.0.0, rebuild, eups publish
-
-  Binary release steps
-  ------------------------
-
-  1. Produce factory binaries
-  1. Test factory binaries
-  1. Gather contributed binaries
+  1. Build and publish final release
 
   Documentation Steps
   -------------------------
@@ -384,14 +384,14 @@ There are three "special" teams in the LSST Github org:
 These are used in the release process in the following way:
 
 - ``Data Management`` repos are a dependency of ``lsst_distrib`` and should be
-  tagged with the bare release version, eg. ``42.0.0``, unless the repo is also
+  tagged with the bare release version, eg. ``888.0.0``, unless the repo is also
   a member of the ``DM Externals`` team.  All repos tagged as part of a release
   should be members of the ``Data Management`` team to ensure that DM
   developers are able to modify all components of a release.
 
 - ``DM Externals`` also indicates a dependency of ``lsst_distrib`` but one that
   is tagged with a ``v`` prefix in front of the release version. Eg.,
-  ``v42.0.0`` This is required because ``lsst-build`` derives the eups product
+  ``v888.0.0`` This is required because ``lsst-build`` derives the eups product
   version string from git tags that begin with a number.  DM developers prefer
   that eups display external packages version string rather than of a DM
   composite release. Thus the ``v`` prefix causes the git tag to be ignored by
@@ -417,7 +417,7 @@ git tags
 
 - "official" release git tags on external/third-party software that DM has
   repackaged must be prefixed with a ``v`` but are otherwise identical to that
-  on DM produced code. Eg., ``42.0.0 -> v42.0.0``
+  on DM produced code. Eg., ``888.0.0 -> v888.0.0``
 
 - Non-"official" releases, release candidates, weekly builds, etc. **must**
   start with a *letter*
@@ -435,27 +435,27 @@ Examples of *valid* (good) git tags
 .. code-block:: text
 
   # unofficial builds
-  d.2038.01.19
-  w.2038.03
+  d.9999.01.02
+  w.9999.52
 
   # release candidate
-  v42.0.0.rc99
+  v888.0.0.rc99
 
   # official release of DM produced code
-  42.0.0
+  888.0.0
 
   # official release of external/third-party product
-  v42.0.0
+  v888.0.0
 
 Examples of *invalid* (bad) git tags
 
 .. code-block:: text
 
-  d_2038_01_19
-  w_2038_03
-  v42-0-0-rc99
-  42_0_0
-  v42_0_0
+  d_9999_01_02
+  w_9999_52
+  v888-0-0-rc99
+  888_0_0
+  v888_0_0
   foo/bar
 
 eups tags
@@ -478,25 +478,25 @@ Examples of *valid* (good) eups tags
 .. code-block:: text
 
   # unofficial builds
-  d_2038_01_19
-  w_2038_03
+  d_9999_01_02
+  w_9999_52
 
   # release candidate
-  v42_0_0_rc99
+  v888_0_0_rc99
 
   # official release of DM produced code AND external/third-party product
-  v42_0_0
+  v888_0_0
 
 Examples of *invalid* (bad) eup tags
 
 .. code-block:: text
 
   123
-  d.2038.01.19
-  w.2038.03
-  v42_0_0-rc99
-  42.0.0
-  v42.0.0
+  d.9999.01.02
+  w.9999.52
+  v888_0-rc99
+  888.0.0
+  v888.0.0
   foo/bar
 
 git <-> eups tag conversion
@@ -505,14 +505,14 @@ git <-> eups tag conversion
 The "tags" along each row in the following table should be considered
 equivalent conversions.
 
-============  ============  ========
-internal git  external git  eups tag
-============  ============  ========
-d.2038.01.19  d.2038.01.19  d_2038_01_19
-w.2038.03     w.2038.03     w_2038_03
-v42.0.0.rc99  v42.0.0.rc99  v42_0_0_rc99
-42.0.0        v42.0.0       v42_0_0
-============  ============  ========
+=============  ============  =============
+internal git   external git  eups tag
+=============  ============  =============
+d.9999.01.02   d.9999.01.19  d_9999_01_02
+w.9999.52      w.9999.52     w_9999_52
+v888.0.0.rc99  v88.0.0.rc99  v888_0_0_rc99
+888.0.0        v888.0.0      v888_0_0
+=============  ============  =============
 
 
 
@@ -569,266 +569,6 @@ Adding a new Conda package
    that that newinstall.sh from master will still be able to do a binary
    install of the current major release.  This may be done by triggering a
    Jenkins ``release/tarball-matrix`` build.
-
-
-
-Making a Manual Release
-=======================
-
-**The official release process is captured as a jenkins job:
-https://ci.lsst.codes/job/release/job/official-release/ which should be
-preferred over manually enumerating all of the release steps.**
-
-
-Get codekit installed
----------------------
-
-The release manager can follow the instructions at:
-
-https://github.com/lsst-sqre/sqre-codekit
-
-If you are working interactively you want to set the environment variable
-``DM_SQUARE_DEBUG`` to ``1`` as it gives more insight on what is going on with
-the Github REST API calls.
-
-
-1st Release Candidate
----------------------
-
-The following sections attempt to document the individual steps that
-``official-release`` is essentially composed of.
-
-Identify base weekly build
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Identify the *git tag* of the weekly build you wish to base the release
-release candidate upon, say ``w.2017.33``.
-
-Look into the text of the annotated tag (using git log or the Github UI) to see
-what the manifest ID (``bXXXX``) number was or use git cli on a local clone of
-a git repo known to be part of the weekly build.
-
-.. code-block:: bash
-
-    # find manifest ID of a previous weekly build
-
-    $ git clone https://github.com/lsst/base
-    Cloning into 'base'...
-    remote: Counting objects: 1041, done.
-    remote: Compressing objects: 100% (9/9), done.
-    remote: Total 1041 (delta 6), reused 0 (delta 0), pack-reused 1032
-    Receiving objects: 100% (1041/1041), 259.28 KiB | 1.21 MiB/s, done.
-    Resolving deltas: 100% (521/521), done.
-    $ cd base
-    $ git tag w.2017.33 -n1
-    w.2017.33       Version w.2017.33 release from w.2017.33/b2999
-
-In the above example, the manifest ID is ``b2999``.
-
-*git tag* the candidate
-^^^^^^^^^^^^^^^^^^^^^^^
-
-Tagging *first* and *third* parties repos allows the release to be reproducible in
-the future and is necessary for the final build process.
-
-Note that the difference in *git tag* name convention between first and third
-parties is automatically handled by the ``--external-team`` flag.
-
-.. code-block:: bash
-
-   # create git "release candidate" tag from manifest ID
-
-   github-tag-version \
-     --debug \
-     --token **** \
-     --user sqreadmin \
-     --email sqre-admin@lists.lsst.org \
-     --org lsst \
-     --allow-team 'Data Management' \
-     --allow-team 'DM Externals' \
-     --external-team 'DM Externals' \
-     --deny-team 'DM Auxilliaries' \
-     --manifest-only \
-     --manifest b2999 \
-     v42.0.0.rc1
-
-.. code-block:: bash
-
-    # create git on aux repos
-    # previous weekly tag.
-
-    github-tag-teams \
-      --debug \
-      --token **** \
-      --user sqreadmin \
-      --email sqre-admin@lists.lsst.org \
-      --org lsst \
-      --allow-team 'DM Auxilliaries' \
-      --deny-team 'DM Externals' \
-      --ignore-existing-tag \
-      --tag v42.0.0.rc1
-
-**XXX this is currently broken in that the git tag will be placed at the
-current HEAD of the default branch instead of at the same location as the**
-
-Build and Publish eups ``eupspkg`` packages + eups tag
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
-
-The resulting manifest ID needs to be retrieved to use as input for subsequent
-jobs.
-
-.. code-block:: text
-
-    REFS: v42.0.0.rc1
-    PRODUCTS: lsst_distrib
-    BUILD_DOCS: true
-
-https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-publish/activity
-
-.. code-block:: text
-
-    PRODUCTS: lsst_distrib
-    EUPSPKG_SOURCE: git
-    TAG: v42_0_0_rc1
-    BUILD_ID: bXXXX
-
-Build and Publish eups ``tarball`` packages
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Note that the jenkins ``release/official-release`` job does not trigger
-``release/tarball-matrix`` and triggers ``release/tarball`` build(s) directly
-so as to have more explicit control over the parameters.
-
-https://ci.lsst.codes/blue/organizations/jenkins/release%2Ftarball-matrix/activity
-
-.. code-block:: text
-
-    PRODUCTS: lsst_distrib
-    EUPS_TAG: v42_0_0_rc1
-    SMOKE: true
-    RUN_SCONS_CHECK: true
-    PUBLISH: true
-
-Build and Publish ``scipipe`` docker image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-https://ci.lsst.codes/blue/organizations/jenkins/release%2Fdocker%2Fbuild-stack/activity
-
-.. code-block:: text
-
-    PRODUCTS: lsst_distrib
-    TAG: v42_0_0_rc1  # eups tag
-    NO_PUSH: false
-
-Build and Publish ``jupyterlab`` docker image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Finfra%2Fbuild-jupyterlabdemo/activity
-
-.. code-block:: text
-
-    WIPEOUT: true
-    MANIFEST_ID: bXXXX
-    COMPILER: devtoolset-6
-    EUPS_TAG: v42_0_0_rc1
-    RELEASE_IMAGE: lsstsqre/centos:7-stack-lsst_distrib-v42_0_0_rc1
-    NO_PUSH: false
-
-Run ``validate_drp``
-^^^^^^^^^^^^^^^^^^^^
-
-https://ci.lsst.codes/blue/organizations/jenkins/sqre%2Fvalidate_drp/activity
-
-.. code-block:: text
-
-    WIPEOUT: true
-    MANIFEST_ID: bXXXX
-    COMPILER: devtoolset-6
-    EUPS_TAG: v42_0_0_rc1
-    RELEASE_IMAGE: lsstsqre/centos:7-stack-lsst_distrib-v42_0_0_rc1
-
-
-2nd+ Release Candidate(s)
--------------------------
-
-Produce new manifest (``manifest ID``)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use the previous ``rc`` tag along with the release branch to produce a new
-manifest.
-
-https://ci.lsst.codes/blue/organizations/jenkins/release%2Frun-rebuild/activity
-
-The resulting manifest ID needs to be retrieved to use as input for subsequent
-jobs.
-
-.. code-block:: text
-
-    REFS: v42.0.x v42.0.0.rc1
-    PRODUCTS: lsst_distrib
-    BUILD_DOCS: false
-    PREP_ONLY: true
-
-
-Final Release
--------------
-
-Final tag
-^^^^^^^^^
-
-This is mostly a repeat of the process for laying down the candidate tag but
-this time we use numeric tags so that eups will see them:
-
-.. code-block:: bash
-
-   github-tag-version \
-     --debug \
-     --token **** \
-     --user sqreadmin \
-     --email sqre-admin@lists.lsst.org \
-     --org lsst \
-     --allow-team 'Data Management' \
-     --allow-team 'DM Externals' \
-     --external-team 'DM Externals' \
-     --deny-team 'DM Auxilliaries' \
-     --manifest-only \
-     --manifest b9999 \
-     42.0.0
-
-.. code-block:: bash
-
-    github-tag-teams \
-      --debug \
-      --token **** \
-      --user sqreadmin \
-      --email sqre-admin@lists.lsst.org \
-      --org lsst \
-      --allow-team 'DM Auxilliaries' \
-      --deny-team 'DM Externals' \
-      --ignore-existing-tag \
-      --tag v42.0.0
-
-Release build
-^^^^^^^^^^^^^
-
-- Submit the run-rebuild job with your parameters (eg. ``42.0.0`` ``v42.0.0``)
-
-- At this point you should not be seeing master-g type references as eups
-  versions. Everything should have a tag-derived version such as ``42.0.0`` if
-  they are a DM repo and their semantic tag (eg. ``pyfits 3.0``) if they are
-  external.  If you see one, you need to chase down why. The only situation
-  that should happen is if a third party but a branch is used for LSST
-  development that lacks any other type of semantic versioning (in the
-  ``42.0.0``
-  release this included starlink_ast and jointcal_cholmod.
-
-- Note your final ``bNNNN`` number for the publish (either from the build log
-  or by looking at the next of the annotated ``42.0.0`` tag on any repo eg. afw).
-
-- Submit the run-publish job making sure you have selected ``package`` and not
-  ``git`` as the option.
 
 
 .. _official-release: https://ci.lsst.codes/blue/organizations/jenkins/release%2Fofficial-release/activity/
