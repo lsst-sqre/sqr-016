@@ -529,15 +529,14 @@ Adding a new Conda package
 --------------------------
 
 #. The name of the package needs to "bleed" or un-versioned environment files in
-   the ``lsst/lsstsw`` repo. Which are:
+   the ``lsst/scipipe_conda_env`` repo. Which are:
 
-    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_bleed-linux-64.txt
-    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_bleed-osx-64.txt
+    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-linux-64.txt
+    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-osx-64.txt
 
-    These env files are currently kept in the original conda environment file
-    format and have not yet been migrated to the newer ``yaml`` based format as
-    it only works with fairly recent conda releases. (*TODO* migrate to `yaml`
-    format after DM-14011 is merged).
+    After the implementation of DM-17457, the conda environments have been
+    migrated to ``yaml`` format. This permits to add pip packages to the 
+    environment definition.
 
     The bleed env files should be keep in sync with the *exception* of the
     ``nomkl`` package, which is required on ``linux``.  Also note that the env
@@ -548,8 +547,8 @@ Adding a new Conda package
    file.  A side effect of this is other package versions will almost certainly
    change and this **is an ABI breaking event**. The existing env files are:
 
-    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_packages-linux-64.txt
-    - https://github.com/lsst/lsstsw/blob/master/etc/conda3_packages-osx-64.txt
+    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_packages-linux-64.txt
+    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_packages-osx-64.txt
 
     ``conda list -e`` should be run on ``linux`` and ``osx`` installs and the
     results committed for both platforms as **a single commit** so that the the
@@ -559,7 +558,7 @@ Adding a new Conda package
    [version of] conda env files are used and to define the eups binary tarball
    "ABI", jenkins needs to know this value to ensure that ``newinstall.sh`` is
    explicitly using the correct ref and to construct the paths of the tarball
-   ``EUPS_PKGROOT`` s.  The ``lsstsw_ref`` / ``LSST_LSSTSW_REF`` needs to be
+   ``EUPS_PKGROOT`` s.  The ``splenv_ref`` / ``LSST_SPLENV_REF`` needs to be
    updated at:
 
     - https://github.com/lsst-sqre/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
