@@ -561,7 +561,7 @@ Adding a new Conda package
    ``EUPS_PKGROOT`` s.  The ``splenv_ref`` / ``LSST_SPLENV_REF`` needs to be
    updated at:
 
-    - https://github.com/lsst-sqre/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
+    - https://github.com/lsst-dm/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
     - https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh#L33
 
 #. The ~last major release should be rebuilt in the new "ABI" ``EUPS_PKGROOT`` so
