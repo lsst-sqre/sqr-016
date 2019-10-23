@@ -528,14 +528,14 @@ as the git ``sha1`` of the conda environment files is used to defined the
 Adding a new Conda package
 --------------------------
 
-#. The name of the package needs to "bleed" or un-versioned environment files in
+#. The name of the package needs to be added to the "bleed" or un-versioned environment files in
    the ``lsst/scipipe_conda_env`` repo. Which are:
 
     - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-linux-64.txt
     - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-osx-64.txt
 
     After the implementation of DM-17457, the conda environments have been
-    migrated to ``yaml`` format. This permits to add pip packages to the 
+    migrated to ``yaml`` format. This permits to add pip packages to the
     environment definition.
 
     The bleed env files should be keep in sync with the *exception* of the
@@ -558,8 +558,8 @@ Adding a new Conda package
    [version of] conda env files are used and to define the eups binary tarball
    "ABI", jenkins needs to know this value to ensure that ``newinstall.sh`` is
    explicitly using the correct ref and to construct the paths of the tarball
-   ``EUPS_PKGROOT`` s.  The ``splenv_ref`` / ``LSST_SPLENV_REF`` needs to be
-   updated at:
+   ``EUPS_PKGROOT`` s.  The value of ``splenv_ref`` / ``LSST_SPLENV_REF`` needs
+   to be updated at:
 
     - https://github.com/lsst-dm/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
     - https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh#L33
