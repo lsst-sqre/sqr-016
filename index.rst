@@ -564,6 +564,12 @@ Adding a new Conda package
     - https://github.com/lsst-dm/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
     - https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh#L33
 
+   Once a commit is present in the ``lsst/scipipe_conda_env`` (I.e., on an
+   un-merged branch), the conda env may be tested by triggering the
+   https://ci.lsst.codes/blue/organizations/jenkins/stack-os-matrix/activity
+   job with the ``SPLENV_REF`` parameter set to the abbreviated sha1 of the
+   candidate conda env.
+
 #. The ~last major release should be rebuilt in the new "ABI" ``EUPS_PKGROOT`` so
    that that newinstall.sh from master will still be able to do a binary
    install of the current major release.  This may be done by triggering a
