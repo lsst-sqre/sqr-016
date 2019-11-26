@@ -316,6 +316,10 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
   pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
   script.
 
+.. note::
+
+   **Deprecation documentation**: in order to add in the release note the deprecated methods and functions, search the codebase for``@deprecated\(`` and ``deprecate_pybind11``. For example, in a MacOS console, the command **ack** can be used: ``ack -A 3 --python "@deprecated\(" stack/``. This will print out each occurence of ``"@deprecated\("`` found and the following 3 lines.
+
 Announce official release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
