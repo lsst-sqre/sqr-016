@@ -331,7 +331,9 @@ future releases.
 
 To identify all deprecations that have to be mentioned in a release note, we
 search the codebase looking for specific strings. The application **ack** is
-used here as a reference, since it is easy to install in Unix systems.
+used here as a reference, since it is easy to install in Unix systems [#ack]_.
+
+.. [#ack] The command **ack** may be required to be installed separatelly.
 
 These are the strings to search:
 
