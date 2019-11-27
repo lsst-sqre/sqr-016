@@ -319,13 +319,29 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
 Documenting Deprecations
 """"""""""""""""""""""""
 
-In order to add in the release note the deprecated methods and functions, search the codebase for ``@deprecated\(`` and ``deprecate_pybind11``. For example, in a MacOS console, the command **ack** can be used: ``ack -A 3 --python "@deprecated\(" stack/``. This will print out each occurrence of ``"@deprecated\("`` found and the following 3 lines.
+Deprecations are divided into two groups:
 
-Deprecations are divided in 2 groups:
+- **Pending Deprecations**: the methods and functions that are marked as
+deprecated and will be removed **after** the next major release is done. This
+implies they will still be available for some time.
 
-- **Pending Deprecations**: the methods and functions that are marked as deprecated and will be removed **after** the next major release is done. This implies they will still be available for some time, but their use is discouraged.
+- **Actual Deprecations**: the methods and functions that will be removed
+**before** the next major release. This implies they will not be available in
+future releases.
 
-- **Actual Deprecations**: the methods and functions that will be removed **before** next major release. This implies they will not be available in future releases anymore. 
+To identify all deprecations that have to be mentioned in a release note, we
+search the codebase looking for specific strings. The application **ack** is
+used here as a reference, since it is easy to install in Unix systems.
+
+These are the strings to search:
+
+- **python deprecations**: ``ack -A 3 --python "@deprecated\(" stack/``
+
+- **pybind11 deprecations**: ``ack -A 3 --python "deprecate_pybind11" stack/``
+
+- **C++ deprecations**: ``ack -A 3 --cpp "\[deprecated\(" stack/``
+
+- **config deprecations**: ``ack -B 3 --python "^\s+deprecated=" stack/``
 
 Announce official release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
