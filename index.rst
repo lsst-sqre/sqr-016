@@ -316,6 +316,35 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
   pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
   script.
 
+Documenting Deprecations
+""""""""""""""""""""""""
+
+Deprecations are divided into two groups:
+
+- **Pending Deprecations**: the methods and functions that are marked as
+deprecated and will be removed **after** the next major release is done. This
+implies they will still be available for some time.
+
+- **Actual Deprecations**: the methods and functions that will be removed
+**before** the next major release. This implies they will not be available in
+future releases.
+
+To identify all deprecations that have to be mentioned in a release note, we
+search the codebase looking for specific strings. The application **ack** is
+used here as a reference, since it is easy to install in Unix systems [#ack]_.
+
+.. [#ack] The command **ack** may have to be installed separatelly.
+
+These are the strings to search:
+
+- **python deprecations**: ``ack -A 3 --python "@deprecated\(" stack/``
+
+- **pybind11 deprecations**: ``ack -A 3 --python "deprecate_pybind11" stack/``
+
+- **C++ deprecations**: ``ack -A 3 --cpp "\[deprecated\(" stack/``
+
+- **config deprecations**: ``ack -B 3 --python "^\s+deprecated=" stack/``
+
 Announce official release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
