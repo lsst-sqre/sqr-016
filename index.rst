@@ -259,7 +259,7 @@ Example 1:
 
    SOURCE_GIT_REFS: v888.0.0.rc6
    RELEASE_GIT_TAG: 888.0.0
-   O_LATEST: false
+   O_LATEST: true
 
 Branch ``newinstall.sh`` repo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -375,17 +375,13 @@ c.l.o stubb
   Release Precursor Steps
   ---------------------------------
 
-  1. Release Jira issue: https://jira.lsstcorp.org/browse/DM-XXXXX
-  1. DMCCB establish if Software Product is ready for next release
   1. Identify any pre-release blockers ("must-have features") :tools:
-  To all contributors, please check if there are outstanding issues that have to be included in the next M.m.p release and related them as blocker to the above issue DM-XXXXX.
-  1. Tentative weekly to use as starting point for the release is w_20YY_W
-  1. Tentative target date to close the release on November  27th, 2019.
-  1.  Create corresponding Jira issues for:
-   - Create the release candidate
-   - Create the Characterization Report
-   - write the Release Note
-   - Validate the release candidate
+  Contributors check if there are outstanding issues that have to be included in the next M.m.p release and related them as blocker to the above issue DM-XXXXX.
+  1. Create Jira issues for each release activity.
+
+  Release Jira issue: https://jira.lsstcorp.org/browse/DM-XXXXX
+  Tentative weekly to use as starting point for the release is w_20YY_WW
+  Tentative target date to close the release is YYYY-MM-DD.
 
   Release Engineering Steps
   -------------------------------
@@ -394,23 +390,23 @@ c.l.o stubb
   1. Create first release candidate vM.m.p.rc1
   1. Release candidate vM.m.p.rc1 available:
    - Build: bxxxxx
-   - Weekly: w_20YY_W
-  1. Run build and demo on supported platforms.
+   - Weekly: w_20YY_WW
+  1. Build the release candidate on supported platforms.
   1. Wait for bugs and additional issues to be fixed and ported to the release branch.
   1. Create new release candidates if bugs / new issues have been fixed in the release branch
   1. Create official release M.m.p
-  1. Inform N2P3 of the availability of the release
 
   Documentation Steps
   -------------------------
 
+  In parallel with the engineering steps after rc1 is available.
   [Integration on b.M.m branch of pipelines_lsst_io](https://github.com/lsst/pipelines_lsst_io/pull/TBD)
 
   1. Update Prereqs/Install
   1. Gather Release notes
   1. Gather Metrics report
   1. Update Known Issues
-  1. Email announcement (release availability community post)
+  1. Release availability community post
 
 
 
