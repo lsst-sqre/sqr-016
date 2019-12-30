@@ -310,11 +310,36 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
 
 - Known issues and pre-requisites from the T/CAM for SQuaRE
 
+- Deprecation information
+
 - Before merging to master, ask the Documentation Engineer to review
 
 - Update the ``newinstall.rst`` page on your release branch of
   pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
   script.
+
+The documenteer Jenkins job
+""""""""""""""""""""""""""
+
+The release process requires to include in the documentation repository 
+pipelines_lsst_io not only the documentation part derived directly from the 
+code, but also the human provided part, like release notes, deprecations, etc.
+
+In order to have an appropriate overview of the documentation in preparation,
+each time new content is added to the documentation release branch, the 
+documenteer Jenkins job will be executed manually by the release manager.
+This can be done after the first release candidate has been created and the 
+corresponding EUPS has been pushed to eups.lsst.codes.
+
+Example of the parameters to use:
+
+.. code-block:: text
+
+   EUPS distribution tag name: v_888_0_0_rc1
+   LTD edition slug: 888.0.x
+   GitHub rep slug: last/pipelines_lsst_io
+   Git rep ref: 888.0.x
+   Publish documenter docs: TRUE
 
 Documenting Deprecations
 """"""""""""""""""""""""
@@ -344,6 +369,14 @@ These are the strings to search:
 - **C++ deprecations**: ``ack -A 3 --cpp "\[deprecated\(" stack/``
 
 - **config deprecations**: ``ack -B 3 --python "^\s+deprecated=" stack/``
+
+Official Release Documentation
+""""""""""""""""""""""""""""""
+
+Since the pipelines_lsst_io repository is devoted to document automatically
+the content of the pipelines master repositories, the publication of the final
+888.0.0 version of the documentation and its merge to master has to be executed
+manually be the documentation engineer.
 
 Announce official release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
