@@ -372,30 +372,45 @@ c.l.o stubb
 
   Here is where we currently are in the release process. Current step in bold.
 
-  Precursor Steps
+  Release Precursor Steps
   ---------------------------------
 
+  1. Release Jira issue: https://jira.lsstcorp.org/browse/DM-XXXXX
+  1. DMCCB establish if Software Product is ready for next release
   1. Identify any pre-release blockers ("must-have features") :tools:
-  2. Wait for them to clear
+  To all contributors, please check if there are outstanding issues that have to be included in the next M.m.p release and related them as blocker to the above issue DM-XXXXX.
+  1. Tentative weekly to use as starting point for the release is w_20YY_W
+  1. Tentative target date to close the release on November  27th, 2019.
+  1.  Create corresponding Jira issues for:
+   - Create the release candidate
+   - Create the Characterization Report
+   - write the Release Note
+   - Validate the release candidate
 
   Release Engineering Steps
   -------------------------------
 
-  1. Branch 888.0.x of newinstall.sh
-  1. Build and publish rc1 release candidate (based on w.9999.52)
-  1. **Wait for first round of bugs to clear**
-  1. Build and publish additional rcX releases if/as necessary
-  1. Full OS testing (see https://ls.st/faq )
-  1. Build and publish final release
+  1. Check that the weekly build is scientifically suitable to be used as starting point for the release
+  1. Create first release candidate vM.m.p.rc1
+  1. Release candidate vM.m.p.rc1 available:
+   - Build: bxxxxx
+   - Weekly: w_20YY_W
+  1. Run build and demo on supported platforms.
+  1. Wait for bugs and additional issues to be fixed and ported to the release branch.
+  1. Create new release candidates if bugs / new issues have been fixed in the release branch
+  1. Create official release M.m.p
+  1. Inform N2P3 of the availability of the release
 
   Documentation Steps
   -------------------------
 
+  [Integration on b.M.m branch of pipelines_lsst_io](https://github.com/lsst/pipelines_lsst_io/pull/TBD)
+
   1. Update Prereqs/Install
-  1. Update Known Issues
   1. Gather Release notes
   1. Gather Metrics report
-  1. **Email announcement**
+  1. Update Known Issues
+  1. Email announcement (release availability community post)
 
 
 
