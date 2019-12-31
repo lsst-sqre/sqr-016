@@ -314,16 +314,15 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
 
 - Before merging to master, ask the Documentation Engineer to review
 
-- Update the ``newinstall.rst`` page on your release branch of
-  pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
-  script.
-
 The documenteer Jenkins job
-""""""""""""""""""""""""""
+"""""""""""""""""""""""""""
 
-The release process requires to include in the documentation repository 
-pipelines_lsst_io not only the documentation part derived directly from the 
-code, but also the human provided part, like release notes, deprecations, etc.
+The release process is responsible for publishing a new edition of 
+https://pipelines.lsst.io.
+That documentation site provides not only software documentation derived from 
+each package in the release, but also includes information about the release, 
+such as release notes and deprecations.
+Release documentation is contained directly in the pipelines_lsst_io_ repository.
 
 In order to have an appropriate overview of the documentation in preparation,
 each time new content is added to the documentation release branch, the 
@@ -340,6 +339,10 @@ Example of the parameters to use:
    GitHub rep slug: last/pipelines_lsst_io
    Git rep ref: 888.0.x
    Publish documenter docs: TRUE
+
+For more information, see `Building pipelines.lsst.io with Jenkins (sqre/infra/documenteer) 
+<https://developer.lsst.io/stack/building-pipelines-lsst-io-with-documenteer-job.html>`_ 
+in the DM Developer Guide.
 
 Documenting Deprecations
 """"""""""""""""""""""""
@@ -370,8 +373,8 @@ These are the strings to search:
 
 - **config deprecations**: ``ack -B 3 --python "^\s+deprecated=" stack/``
 
-Official Release Documentation
-""""""""""""""""""""""""""""""
+Releasing pipelines.lsst.io
+"""""""""""""""""""""""""""
 
 Since the pipelines_lsst_io repository is devoted to document automatically
 the content of the pipelines master repositories, the publication of the final
