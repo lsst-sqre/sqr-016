@@ -376,8 +376,10 @@ c.l.o stubb
   ---------------------------------
 
   1. Identify any pre-release blockers ("must-have features") :tools:
-  Contributors check if there are outstanding issues that have to be included in the next M.m.p release and related them as blocker to the above issue DM-XXXXX.
+  Contributors check if there are outstanding issues that have to be included in the next release and relate them as blocker to the above issue DM-XXXXX.
+  1. Wait untill all blocking issues are resolved.
   1. Create Jira issues for each release activity.
+  1. Check that the weekly build is scientifically suitable to be used as starting point for the release
 
   Release Jira issue: https://jira.lsstcorp.org/browse/DM-XXXXX
   Tentative weekly to use as starting point for the release is w_20YY_WW
@@ -386,12 +388,12 @@ c.l.o stubb
   Release Engineering Steps
   -------------------------------
 
-  1. Check that the weekly build is scientifically suitable to be used as starting point for the release
   1. Create first release candidate vM.m.p.rc1
   1. Release candidate vM.m.p.rc1 available:
    - Build: bxxxxx
    - Weekly: w_20YY_WW
-  1. Build the release candidate on supported platforms.
+  1. Build the release candidate on supported platforms. Report bugs in Jira if any.
+  1. Invite developers, contributors and downstram users to verify the release candidate and report bugs in Jira if any.
   1. Wait for bugs and additional issues to be identified, fixed and ported to the release branch.
   1. Create new release candidates if bugs / new issues have been fixed in the release branch
   1. Create official release M.m.p
@@ -400,7 +402,7 @@ c.l.o stubb
   -------------------------
 
   In parallel with the engineering steps after rc1 is available.
-  [Integration on b.M.m branch of pipelines_lsst_io](https://github.com/lsst/pipelines_lsst_io/pull/TBD)
+  [Integration on b.M.x branch of pipelines_lsst_io](https://github.com/lsst/pipelines_lsst_io/pull/TBD)
 
   1. Update Prereqs/Install
   1. Gather Release notes
