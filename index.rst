@@ -392,7 +392,7 @@ c.l.o stubb
    - Build: bxxxxx
    - Weekly: w_20YY_WW
   1. Build the release candidate on supported platforms.
-  1. Wait for bugs and additional issues to be fixed and ported to the release branch.
+  1. Wait for bugs and additional issues to be identified, fixed and ported to the release branch.
   1. Create new release candidates if bugs / new issues have been fixed in the release branch
   1. Create official release M.m.p
 
