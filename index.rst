@@ -316,8 +316,8 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
   pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
   script.
 
-Documenting Deprecations
-""""""""""""""""""""""""
+Documenting Deprecations and Removals
+"""""""""""""""""""""""""""""""""""""
 
 Deprecated interfaces may be removed in the major release after the one in which their deprecations first appear.
 These deprecations must be included in the release notes.
@@ -337,6 +337,11 @@ These are the strings to search:
 - **C++ deprecations**: ``ack -A 3 --cpp "\[deprecated\(" stack/``
 
 - **config deprecations**: ``ack -B 3 --python "^\s+deprecated=" stack/``
+
+Deprecated code should be removed in the major release following the one in which it was deprecated (though removal work is occassionally not scheduled in time for this to occur).
+Removals should be documented in another section of the release notes.
+The set of deprecations in the release notes for the previous release is probably the most complete list of code that *might* have been removed in a release, but each of these must be checked against Jira or the code itself to determine whether removal actually occurred.
+Deprecations that are not followed by removals should be left in the release notes as deprecations.
 
 Announce official release
 ^^^^^^^^^^^^^^^^^^^^^^^^^
