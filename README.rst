@@ -1,7 +1,7 @@
 .. image:: https://img.shields.io/badge/sqr--016-lsst.io-brightgreen.svg
    :target: https://sqr-016.lsst.io
-.. image:: https://travis-ci.org/lsst-sqre/sqr-016.svg
-   :target: https://travis-ci.org/lsst-sqre/sqr-016
+.. image:: https://github.com/lsst-sqre/sqr-016/workflows/CI/badge.svg
+   :target: https://github.com/lsst-sqre/sqr-016/actions/
 ..
   Uncomment this section and modify the DOI strings to include a Zenodo DOI badge in the README
   .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.#####.svg
@@ -13,9 +13,12 @@ SQR-016 Stack release playbook
 
 SQuaRE instructions for making official releases
 
-View this technote at https://sqr-016.lsst.io or see a preview of the current version in `this repo`_.
+**Links:**
 
-
+- Publication URL: https://sqr-016.lsst.io
+- Alternative editions: https://sqr-016.lsst.io/v
+- GitHub repository: https://github.com/lsst-sqre/sqr-016
+- Build system: https://github.com/lsst-sqre/sqr-016/actions/
 
 Build this technical note
 =========================
