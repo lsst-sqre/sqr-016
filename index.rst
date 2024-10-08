@@ -1,3 +1,11 @@
+######################
+Stack release playbook
+######################
+
+.. abstract::
+
+   SQuaRE instructions for making official releases
+
 ..
   Technote content.
 
@@ -37,11 +45,8 @@
 
    Feel free to delete this instructional comment.
 
-:tocdepth: 1
 
-.. Please do not modify tocdepth; will be fixed when a new Sphinx theme is shipped.
 
-.. sectnum::
 
 .. Add content below. Do not include the document title.
 
@@ -179,8 +184,7 @@ branch.  Eg., if changes were needed in ``v888.0.0.rc1`` a "release branch"
 along the lines of ``v888.0.x`` should be created in the repos that need
 changes.
 
-(**TBD**: merge to master and cherry-pick to release branch or merge to release
-branch and merge to ``master``???)
+Back ports and cherry-picking to release branches are described in https://developer.lsst.io/work/backports.html.
 
 Test Release Branch(es)
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -261,44 +265,6 @@ Example 1:
    RELEASE_GIT_TAG: 888.0.0
    O_LATEST: true
 
-Branch ``newinstall.sh`` repo
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In this process we make use of the fact that git doesn't care whether a ref is
-a tag or a branch to constrain the number of branches to repositories that need
-retroactive maintenance or need to be available in more than one cadence. One
-such example is the ``lsst`` repo since it contains newinstall.sh_ which
-sets the version of eups, and that may be different for an official release
-than the current bleed.
-
-Note that the branch does not have ``v`` prefix.
-
-Branch the lsst_ repo:
-
-.. code-block:: bash
-
-   git clone https://github.com/lsst/lsst.git
-   cd lsst
-   git checkout -b 888.0.x
-   git push -u origin 888.0.x
-
-Now in ``lsst/scripts/newinstall.sh`` change the canonical reference for this
-newinstall to be one associated with the current branch:
-
-.. code-block:: text
-
-   NEWINSTALL_URL="https://raw.githubusercontent.com/lsst/lsst/v888.0.x/scripts/newinstall.sh"
-
-and commit and push.
-
-This means that if you need to update ``newinstall.sh`` for bleed users,
-official-release users will not be prompted to update to the latest version,
-but will phone home against their official-release branch for hotfixes.
-
-Also double-check for other things that might need to be updated, like the
-documentation links (though these should really be fixed on master prior to
-branching or cherry-picked back).
-
 Documentation
 ^^^^^^^^^^^^^
 
@@ -311,10 +277,6 @@ Documentation to be collected for the release notes in pipelines_lsst_io_ is:
 - Known issues and pre-requisites from the T/CAM for SQuaRE
 
 - Before merging to master, ask the Documentation Engineer to review
-
-- Update the ``newinstall.rst`` page on your release branch of
-  pipelines_lsst_io_ with the new download location of the ``newinstall.sh``
-  script.
 
 Documenting Deprecations and Removals
 """""""""""""""""""""""""""""""""""""
@@ -379,7 +341,7 @@ c.l.o stubb
   1. Create Jira issues for each release activity.
   1. Check that the weekly build is scientifically suitable to be used as starting point for the release
 
-  Release Jira issue: https://jira.lsstcorp.org/browse/DM-XXXXX
+  Release Jira issue: https://ls.st/DM-XXXXX
   Tentative weekly to use as starting point for the release is w_20YY_WW
   Tentative target date to close the release is YYYY-MM-DD.
 
@@ -559,66 +521,11 @@ v888.0.0.rc99  v88.0.0.rc99  v888_0_0_rc99
 Conda Environment/Packages Update
 =================================
 
-There are conflicting pressures of updating the conda package list frequently
-to minimize the amount of [likely] breakage at one time and resisting changes
-as the git ``sha1`` of the conda environment files is used to defined the
-``ABI`` of the eups ``tarball`` packages.
+Conda package dependencies are now maintained in the rubin-env meta packages.
+For details see https://developer.lsst.io/stack/conda.html
 
-
-Adding a new Conda package
---------------------------
-
-#. The name of the package needs to be added to the "bleed" or un-versioned environment files in
-   the ``lsst/scipipe_conda_env`` repo. Which are:
-
-    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-linux-64.txt
-    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_bleed-osx-64.txt
-
-    After the implementation of DM-17457, the conda environments have been
-    migrated to ``yaml`` format. This permits to add pip packages to the
-    environment definition.
-
-    The bleed env files should be keep in sync with the *exception* of the
-    ``nomkl`` package, which is required on ``linux``.  Also note that the env
-    files should be kept sorted to allow for clean ``diff`` s.
-
-#. The regular conda env files need to be updated by running a fresh install
-   with ``deploy -b``` (bleed install) and then manually exporting the env to a
-   file.  A side effect of this is other package versions will almost certainly
-   change and this **is an ABI breaking event**. The existing env files are:
-
-    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_packages-linux-64.txt
-    - https://github.com/lsst/scipipe_conda_env/blob/master/etc/conda3_packages-osx-64.txt
-
-    ``conda list -e`` should be run on ``linux`` and ``osx`` installs and the
-    results committed for both platforms as **a single commit** so that the the
-    abbrev sha1 of the latest commit for both files will be the same.
-
-#. As an abbreviated sha1 of the ``lsst/lsstsw`` repo is used to select which
-   [version of] conda env files are used and to define the eups binary tarball
-   "ABI", jenkins needs to know this value to ensure that ``newinstall.sh`` is
-   explicitly using the correct ref and to construct the paths of the tarball
-   ``EUPS_PKGROOT`` s.  The value of ``splenv_ref`` / ``LSST_SPLENV_REF`` needs
-   to be updated at:
-
-    - https://github.com/lsst-dm/jenkins-dm-jobs/blob/master/etc/scipipe/build_matrix.yaml#L10
-    - https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh#L33
-
-   Once a commit is present in the ``lsst/scipipe_conda_env`` (I.e., on an
-   un-merged branch), the conda env may be tested by triggering the
-   https://ci.lsst.codes/blue/organizations/jenkins/stack-os-matrix/activity
-   job with the ``SPLENV_REF`` parameter set to the abbreviated sha1 of the
-   candidate conda env.
-
-#. The ~last major release should be rebuilt in the new "ABI" ``EUPS_PKGROOT`` so
-   that that newinstall.sh from master will still be able to do a binary
-   install of the current major release.  This may be done by triggering a
-   Jenkins ``release/tarball-matrix`` build.
-
-
-.. _official-release: https://ci.lsst.codes/blue/organizations/jenkins/release%2Fofficial-release/activity/
+.. _official-release: https://rubin-ci.slac.stanford.edu/blue/organizations/jenkins/release%2Fofficial-release/activity/
 .. _pipelines_lsst_io: https://github.com/lsst/pipelines_lsst_io
 .. _clo: https://community.lsst.org
 .. _lsst: https://github.com/lsst/lsst
-.. _newinstall.sh: https://github.com/lsst/lsst/blob/master/scripts/newinstall.sh
-.. _stack-os-matrix: https://ci.lsst.codes/blue/organizations/jenkins/stack-os-matrix/activity
+.. _stack-os-matrix: https://rubin-ci.slac.stanford.edu/blue/organizations/jenkins/stack-os-matrix/activity/
